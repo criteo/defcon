@@ -1,3 +1,6 @@
 django
 django-bootstrap3
-
+django-emoji
+django-rest-swagger
+djangorestframework
+jsonfield

@@ -16,6 +16,17 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
+from rest_framework import routers
+from rest_framework_swagger.views import get_swagger_view
+
+
+router = routers.DefaultRouter()
+schema_view = get_swagger_view(title='Pastebin API')
+
+
 urlpatterns = [
+    url(r'^', include(router.urls)),
+    url(r'^swagger/$', schema_view),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^admin/', include(admin.site.urls)),
 ]
