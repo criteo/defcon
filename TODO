@@ -1,0 +1,9 @@
+- Add travis / tox and basic unit tests
+- Make a read-only API for existing objects
+- Fill the DB with local-settings
+- Make a basic UI
+- Make a base class for plugins
+- Make a stupid plugin and explain how to run it
+- Make a JIRA plugin
+- Make a Calendar plugin
+- Write documentation
