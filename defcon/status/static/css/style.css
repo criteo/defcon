@@ -1,0 +1,206 @@
+/* vim: set expandtab ts=2 sw=2: */
+/* layout */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+}
+
+div#main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+div#main > header {
+  margin: 1.5rem;
+  padding: 1rem 0;
+}
+
+div#main main {
+  margin: 1rem;
+}
+
+header > h1 {
+  margin: 0;
+  margin-right: 2rem;
+  display: inline;
+}
+
+.defcon-container {
+  height: 60%;
+
+  display: flex;
+  flex-direction: row;
+}
+.defcon-container > .defcon {
+  flex-grow: 1;
+  flex-shrink: 1;
+  height: 20%;
+}
+
+.defcon-container > .defcon.active {
+  flex-grow: 3;
+  flex-shrink: 3;
+  height: 80%;
+}
+
+section.defcon {
+  margin: .5rem;
+}
+
+section.defcon {
+  overflow: hidden;
+  max-width: 60ch;
+}
+
+section.defcon h2 {
+  float: right;
+  padding: 0 1rem 0 0;
+}
+
+section.defcon h3 {
+  text-align: center;
+  margin: .6rem;
+}
+
+section.defcon ul {
+  margin: 0 2em;
+  padding: 0;
+  list-style: none;
+}
+
+section.defcon p {
+  margin: .3rem 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip ellipsis;
+}
+
+/* styles and colors! */
+@font-face {
+  font-style: normal;
+  font-weight: 400;
+}
+
+body {
+  font-family: "Lato", "Helvetica Neue", "Arial", "Sans serif";
+}
+
+header {
+  border-bottom: 1px rgba(255, 255, 255, .4) solid;
+}
+
+h1 {
+  color: white;
+}
+
+section.defcon.dc1 {
+  background-color: #E64759;
+}
+section.defcon.dc2 {
+  background-color: #f39c12;
+}
+section.defcon.dc3 {
+  background-color: #ccbf1b;
+}
+section.defcon.dc4 {
+  background-color: #1BC98E;
+}
+section.defcon.dc5 {
+  background-color: #3498db;
+}
+
+/* I need lighter colors for numbers */
+section.defcon {
+  border-radius: 3px;
+  color: rgba(255, 255, 255, .9);
+}
+section.defcon p {
+  color: rgba(255, 255, 255, .7);
+}
+
+section.defcon h3, section.defcon h3 {
+  color: white;
+}
+
+section.defcon h3 {
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+section.defcon hr {
+  border: 0px;
+  border-top: 1px rgba(255, 255, 255, .2) solid;
+}
+
+section.defcon:before {
+  font-size: 8em;
+  position: relative;
+  line-height: .6em;
+  left: -.1em;
+  opacity: .4;
+}
+section.defcon.active:before {
+  opacity: .8;
+}
+section.defcon.dc1:before { content: "1"; }
+section.defcon.dc2:before { content: "2"; }
+section.defcon.dc3:before { content: "3"; }
+section.defcon.dc4:before { content: "4"; }
+section.defcon.dc5:before { content: "5"; }
+
+
+section.defcon {
+  position: relative;
+}
+section.defcon a.more {
+  display: inline-block;
+  color: rgba(0, 0, 0, 0);
+  width: 1.5rem;
+  height: 1.5rem;
+  line-height: 1rem;
+  border-radius: 2em;
+  background-color: rgba(255, 255, 255, .3);
+}
+section.defcon.active a.more {
+  display: block;
+  margin: 1em auto;
+  position: relative;
+  bottom: 0;
+}
+section.defcon a.more:hover {
+  background-color: rgba(255, 255, 255, .5);
+}
+
+section.defcon a.more:before{
+  display: block;
+  content: "";
+  width: 0;
+  height: 0;
+  position: relative;
+  left: .25rem;
+  top: .6rem;
+  border-style: solid;
+  border-width: .5rem .5rem 0 .5rem;
+  border-color: rgba(255, 255, 255, .3) transparent transparent transparent;
+}
+section.defcon.dc1 a.more:before {
+  border-color: #E64759 transparent transparent transparent;
+}
+section.defcon.dc2 a.more:before {
+  border-color: #f39c12 transparent transparent transparent;
+}
+section.defcon.dc3 a.more:before {
+  border-color: #ccbf1b transparent transparent transparent;
+}
+section.defcon.dc4 a.more:before {
+  border-color: #1BC98E transparent transparent transparent;
+}
+section.defcon.dc5 a.more:before {
+  border-color: #3498db transparent transparent transparent;
+}

@@ -1,0 +1,20 @@
+from django.conf.urls import include, url
+
+from rest_framework import routers
+from rest_framework_swagger.views import get_swagger_view
+
+from defcon.status import views
+
+router = routers.DefaultRouter()
+router.register(r'components', views.ComponentViewSet)
+router.register(r'status', views.StatusViewSet)
+router.register(r'plugin', views.PluginViewSet)
+router.register(r'plugin_instance', views.PluginInstanceViewSet)
+router.register(r'status', views.StatusViewSet)
+
+schema_view = get_swagger_view(title='defcon')
+
+urlpatterns = [
+    url(r'', include(router.urls)),
+    url(r'^swagger/$', schema_view),
+]

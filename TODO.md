@@ -4,10 +4,10 @@
 - Fill the DB with local-settings
 
 ## API
-- Allow 'names' instead of 'id' to get the status of a component.
+- Allow 'name' instead of 'id' to get the status of a component.
 
 ## UI
-- Make a basic UI
+- Allow 'name' instead of 'id' to get the status of a component.
 
 ## CI
 - Add travis / tox

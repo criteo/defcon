@@ -117,6 +117,10 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
+# Bootstrap
+BOOTSTRAP3 = {
+  'theme_url': '//maxcdn.bootstrapcdn.com/bootswatch/3.3.7/darkly/bootstrap.min.css',
+}
 
 try:
   from defcon.local_settings import *  # noqa

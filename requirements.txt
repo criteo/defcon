@@ -3,4 +3,5 @@ django-bootstrap3
 django-emoji
 django-rest-swagger
 djangorestframework
+django-annoying
 jsonfield

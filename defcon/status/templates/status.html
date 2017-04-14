@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block title %}test{% endblock %}
+
+{% block bootstrap3_extra_head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block bootstrap3_content %}
+<div id="main">
+  <header>
+    <h1>Defcon</h1>
+    <span>Current state of the <strong id="perimeter">production</strong> is:</span>
+  </header>
+  <main class="defcon-container">
+    <section class="defcon dc5">
+      <a class="defcon more" href="#dc5-details">More</a>
+    </section>
+    <section class="defcon dc4">
+      <a class="defcon more" href="#dc5-details">More</a>
+    </section>
+    <section class="defcon dc3">
+      <a class="defcon more" href="#dc5-details">More</a>
+    </section>
+    <section class="defcon dc2 active">
+      <h2>Since Fri Apr 6, 10:27 UTC</h2>
+      <hr>
+      <h3>Plugin Name</h3>
+      <ul>
+	<li>Title:
+	  <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque faucibus imperdiet dolor. Proin auctor mollis sapien in maximus. Nam nulla nisi, fermentum vitae vehicula in, sagittis vel orci. Aliquam sodales finibus ex, finibus hendrerit leo rhoncus et. Duis pretium aliquam velit, eu hendrerit metus euismod ac. Proin purus nisl, interdum ut ultricies eget, tincidunt ut orci. Nunc vel bibendum ex, sed aliquam est. Phasellus facilisis arcu id vehicula tempor. Praesent consequat euismod nulla a consectetur.</p></li>
+  </ul>
+      <hr>
+      <h3>Plugin 2</h3>
+      <ul>
+        <li>Title</li>
+  </ul>
+      <hr>
+      <h3>Manual override</h3>
+      <ul>
+        <li>Too much sun: everybody is on the rooftop (by <em>p.crastin</em>)</li>
+      </ul>
+      <a class="defcon more" href="#dc5-details">More</a>
+    </section>
+    <section class="defcon dc1">
+      <a class="defcon more" href="#dc5-details">More</a>
+    </section>
+  </main>
+</div>
+{% endblock %}
+

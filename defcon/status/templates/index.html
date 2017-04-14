@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block title %}test{% endblock %}
+
+{% block bootstrap3_extra_head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+{% endblock %}
+
+{% block bootstrap3_content %}
+<div id="main">
+  <header>
+    <h1>Defcon</h1>
+  </header>
+  <main>
+    <table class="table table-striped">
+      <thead>
+	<th>Name</th>
+	<th>Link</th>
+	<th>State</th>
+      </thead>
+      <tbody>
+	{% for component in components %}
+	<tr>
+	  <td><a href="{% url 'status' component.id %}">{{ component.name }}</a></td>
+	  <td><a href="{{ component.link }}">{{ component.link }}</a></td>
+	  <td>State</td>
+	</tr>
+	{% endfor %}
+      </tbody>
+    </table>
+  </main>
+</div>
+{% endblock %}
+

@@ -19,6 +19,8 @@
 # dev virtualenvs
 *env/
 
+*~
+
 ###
 ### What follows is from https://raw.githubusercontent.com/github/gitignore/master/Python.gitignore
 ### and can be updated from there.
