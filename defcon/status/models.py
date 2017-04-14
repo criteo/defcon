@@ -9,7 +9,7 @@ from django.core import validators
 class Plugin(models.Model):
     name = models.CharField(max_length=60, unique=True)
     description = models.TextField(max_length=254, blank=True)
-    url = models.URLField(max_length=254)
+    link = models.URLField(max_length=254)
     contact = models.EmailField(max_length=254, blank=True)
     py_module = models.CharField(max_length=255)
 
@@ -27,7 +27,7 @@ class Status(models.Model):
     )
     title = models.CharField(max_length=60)
     description = models.TextField(max_length=254, blank=True)
-    url = models.URLField(max_length=254)
+    link = models.URLField(max_length=254)
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True)
 
@@ -64,7 +64,7 @@ class PluginInstance(models.Model):
 class Component(models.Model):
     name = models.CharField(max_length=60, unique=True)
     description = models.TextField(max_length=254, blank=True)
-    url = models.URLField(max_length=254)
+    link = models.URLField(max_length=254)
     contact = models.EmailField(max_length=254)
     plugins = models.ManyToManyField(PluginInstance, blank=True)
 

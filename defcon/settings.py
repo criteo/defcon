@@ -10,8 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
+from __future__ import print_function
+
 import os
 import sys
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -118,4 +121,4 @@ REST_FRAMEWORK = {
 try:
   from defcon.local_settings import *  # noqa
 except ImportError:
-  print ("Could not import graphite.local_settings, using defaults!", file=sys.stderr)
+  print("Could not import graphite.local_settings, using defaults!", file=sys.stderr)
