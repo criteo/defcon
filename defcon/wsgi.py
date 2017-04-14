@@ -1,5 +1,4 @@
-"""
-WSGI config for defcon project.
+"""WSGI config for defcon project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
