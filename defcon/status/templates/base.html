@@ -1,6 +1,12 @@
 {% extends 'bootstrap.html' %}
 
 {% load bootstrap3 %}
+{% load staticfiles %}
+
+{% block bootstrap3_extra_head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+{% endblock %}
+
 
 {% block bootstrap3_content %}
 

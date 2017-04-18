@@ -1,5 +1,6 @@
 """Models for defcon.status."""
 import uuid
+import collections
 
 import jsonfield
 
@@ -61,7 +62,7 @@ class Status(models.Model):
 
     def __str__(self):
         return '%s - %s - %s' % (
-            self.status,
+            self.defcon,
             self.title,
             self.modified_on
         )
@@ -102,12 +103,30 @@ class Component(models.Model):
     plugins = models.ManyToManyField(PluginInstance, blank=True)
 
     def statuses(self):
-        """Returnes all statuses."""
-        return None
+        """Returnes all statuses indexed by defcon number."""
+        ret = {}
+        defcons = [5, 4, 3, 2, 1]
+
+        for dc in defcons:
+            ret[dc] = collections.defaultdict(list)
+
+        for plugin in self.plugins.all():
+            for status in plugin.statuses.all():
+                if status.active:
+                    ret[status.defcon][plugin].append(status)
+
+        for dc in defcons:
+            ret[dc].default_factory = None
+
+        ret = sorted(ret.items(), key=lambda i: i[0])
+        ret.reverse()
+
+        return ret
 
     def defcon(self):
-        """Returns defcon number and associated statuses."""
-        return None
+        """Returns defcon number."""
+        # TODO look at active status + overrides
+        return 5
 
     def __str__(self):
         return self.name

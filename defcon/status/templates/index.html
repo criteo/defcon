@@ -1,13 +1,9 @@
 {% extends 'base.html' %}
 
 {% load bootstrap3 %}
-{% load staticfiles %}
+{% load defcon %}
 
 {% block title %}DefCon{% endblock %}
-
-{% block bootstrap3_extra_head %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-{% endblock %}
 
 {% block content %}
 <div id="main">
@@ -16,11 +12,12 @@
   </header>
   <main>
     {% for component in components %}
-    <div class="panel panel-primary">
+    <div class="panel panel-{{ component.defcon|defcon_to_class }}">
       <div class="panel-heading">
 	<h3 class="panel-title">{{ component.name }}</h3>
       </div>
       <div class="panel-body">
+	DefCon: <span class="badge">{{ component.defcon }}</span>
 	{% if component.descrition %}
 	<p>
 	  Description:
@@ -29,7 +26,6 @@
 	{% endif %}
 	<p>
 	  View: <a href="{% url 'status' component.id %}">{{ component.name }}/</a>
-	  <span class="badge">1</span>
 	  <span class="label label-danger">Danger</span>
 	  {% if component.link %}
 	  <br />
