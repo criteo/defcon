@@ -53,6 +53,7 @@ class Status(models.Model):
 
     @property
     def active(self):
+        """Return True if active now."""
         now = timezone.now()
         if now < self.time_start:
             return False
@@ -103,7 +104,7 @@ class Component(models.Model):
     plugins = models.ManyToManyField(PluginInstance, blank=True)
 
     def statuses(self):
-        """Returnes all statuses indexed by defcon number."""
+        """Return all statuses indexed by defcon number."""
         ret = {}
         defcons = [5, 4, 3, 2, 1]
 
@@ -124,7 +125,7 @@ class Component(models.Model):
         return ret
 
     def defcon(self):
-        """Returns defcon number."""
+        """Return defcon number."""
         # TODO look at active status + overrides
         return 5
 
