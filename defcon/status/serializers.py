@@ -41,3 +41,18 @@ class StatusSerializer(serializers.HyperlinkedModelSerializer):
 
         model = models.Status
         fields = '__all__'
+
+
+class ComponentFullSerializer(serializers.HyperlinkedModelSerializer):
+    """Serializer for Component with expanded content."""
+    # statuses = StatusSerializer(many=True)
+    defcon = serializers.IntegerField()
+
+    class Meta:
+        """Configuration."""
+
+        model = models.Component
+        # TODO:
+        # - add statuses
+        # - change the base url
+        fields = ('name', 'description', 'link', 'contact', 'defcon', 'url')

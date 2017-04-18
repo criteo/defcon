@@ -131,6 +131,7 @@ class Component(models.Model):
 
         return ret
 
+    @property
     def defcon(self):
         """Return defcon number."""
         # TODO look at active status + overrides

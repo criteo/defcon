@@ -9,6 +9,13 @@ from defcon.status import models
 from defcon.status import serializers
 
 
+class DefConViewSet(viewsets.ReadOnlyModelViewSet):
+    """API view for Component with expanded statuses."""
+
+    queryset = models.Component.objects.all()
+    serializer_class = serializers.ComponentFullSerializer
+
+
 class ComponentViewSet(viewsets.ModelViewSet):
     """API view for Component."""
 
