@@ -45,6 +45,7 @@ class StatusSerializer(serializers.HyperlinkedModelSerializer):
 
 class ComponentFullSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for Component with expanded content."""
+
     # statuses = StatusSerializer(many=True)
     defcon = serializers.IntegerField()
 
