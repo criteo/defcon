@@ -9,13 +9,18 @@ from django.core import validators
 from django.utils import timezone
 
 
+_ID_VALIDATOR = validators.RegexValidator(
+    r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
+
+
 class Plugin(models.Model):
     """A defcon plugin."""
 
-    name = models.CharField(max_length=60, unique=True)
+    id = models.CharField(
+        primary_key=True, max_length=64, validators=[_ID_VALIDATOR])
+    name = models.CharField(max_length=64)
     description = models.TextField(max_length=254, blank=True)
-    link = models.URLField(max_length=254)
-    contact = models.EmailField(max_length=254, blank=True)
+    link = models.URLField(max_length=254, blank=True)
     py_module = models.CharField(max_length=255)
 
     def __str__(self):
@@ -97,7 +102,9 @@ class PluginInstance(models.Model):
 class Component(models.Model):
     """A monitored component."""
 
-    name = models.CharField(max_length=60, unique=True)
+    id = models.CharField(
+        primary_key=True, max_length=64, validators=[_ID_VALIDATOR])
+    name = models.CharField(max_length=64)
     description = models.TextField(max_length=254, blank=True)
     link = models.URLField(max_length=254)
     contact = models.EmailField(max_length=254)

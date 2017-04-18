@@ -4,7 +4,6 @@ from django.utils import timezone
 
 from defcon.status import models
 from defcon.status import views
-from defcon.plugins import base
 
 
 class ModelTest(test.TestCase):
@@ -35,23 +34,3 @@ class ViewTest(test.TestCase):
     def test_component_view_set(self):
         """See if they do stuff."""
         views.ComponentViewSet()
-
-
-class PluginsTests(test.TestCase):
-    """Test the plugins."""
-
-    def test_plugin(self):
-        """Test that we can build plugins."""
-        class _FakePlugin(base.Plugin):
-            """Fake class for testing."""
-
-            def __init__(self, settings):
-                """Fake __init__."""
-                super(_FakePlugin, self).__init__(settings)
-
-            def statuses(self):
-                """Fake statuses."""
-                return []
-
-        # Can we instantiate it ?
-        _FakePlugin({})
