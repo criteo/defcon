@@ -16,6 +16,14 @@ class PluginsTests(test.TestCase):
                 """Fake __init__."""
                 super(_FakePlugin, self).__init__(settings)
 
+            @property
+            def short_name(self):
+                return 'fake'
+
+            @property
+            def name(self):
+                return 'fake'
+
             def statuses(self):
                 """Fake statuses."""
                 return []
