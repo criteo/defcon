@@ -12,7 +12,7 @@ TODO: screenshot
 
 ## Plugins
 
-See [plugins/README.md](plugins/README.md)
+See [defcon/plugins/README.md](defcon/plugins/README.md)
 
 ## Quickstart
 
