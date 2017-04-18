@@ -1,5 +1,7 @@
 """Tests for defcon.status."""
 from django import test
+from django.utils import timezone
+
 
 from defcon.status import models
 from defcon.status import views
@@ -13,6 +15,18 @@ class ModelTestCase(test.TestCase):
         p = models.Plugin.objects.create()
         pi = models.PluginInstance.objects.create(plugin=p)
         self.assertEqual(pi.component, None)
+
+
+    def test_status(self):
+        s = models.Status.objects.create(defcon=5)
+        self.assertTrue(s.active)
+
+        s.time_end = timezone.now().replace(year=1980)
+        self.assertFalse(s.active)
+
+        s.time_end = None
+        s.time_start = timezone.now().replace(year=2030)
+        self.assertFalse(s.active)
 
 
 class ViewTestcase(test.TestCase):
