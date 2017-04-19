@@ -3,6 +3,8 @@ from rest_framework import serializers
 from defcon.status import models
 
 
+# Models for the full API.
+
 class ComponentSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for Component."""
 
@@ -43,17 +45,42 @@ class StatusSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
+class StatusFullSerializer(serializers.HyperlinkedModelSerializer):
+    """Serializer for Status."""
+
+    class Meta:
+        """Configuration."""
+
+        model = models.Status
+        fields = '__all__'
+
+
+# Bellow are serializers for the simple /defcon/ API.
+
+
+class PluginInstanceFullSerializer(serializers.HyperlinkedModelSerializer):
+    """Serializer for PluginInstance with expanded content."""
+
+    statuses = StatusFullSerializer(many=True)
+
+    class Meta:
+        """Configuration."""
+
+        model = models.PluginInstance
+        fields = '__all__'
+
+
 class ComponentFullSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for Component with expanded content."""
 
-    # statuses = StatusSerializer(many=True)
+    plugins = PluginInstanceFullSerializer(many=True)
+
+    # Statuses for current defcon level.
+    statuses = StatusFullSerializer(many=True)
     defcon = serializers.IntegerField()
 
     class Meta:
         """Configuration."""
 
         model = models.Component
-        # TODO:
-        # - add statuses
-        # - change the base url
-        fields = ('name', 'description', 'link', 'contact', 'defcon', 'url')
+        fields = '__all__'

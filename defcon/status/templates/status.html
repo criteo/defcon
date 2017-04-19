@@ -14,7 +14,7 @@
     </span>
   </header>
   <main class="defcon-container">
-    {% for dc, data in component.statuses %}
+    {% for dc, data in component.statuses_by_plugin %}
     <section class="defcon dc{{ dc }} {% if dc == component.defcon %}active{% endif %}">
       <a class="defcon more" href="#dc{{ dc }}-details">More</a>
       <ul>

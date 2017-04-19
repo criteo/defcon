@@ -110,7 +110,20 @@ class Component(models.Model):
     contact = models.EmailField(max_length=254)
     plugins = models.ManyToManyField(PluginInstance, blank=True)
 
-    def statuses(self):
+    def statuses(self, defcon=None):
+        """Return statuses for a specific defcon level."""
+        if defcon is None:
+            defcon = self.defcon
+
+        ret = []
+        for plugin in self.plugins.all():
+            for status in plugin.statuses.all():
+                if status.active and defcon == status.defcon:
+                    ret.append(status)
+
+        return ret
+
+    def statuses_by_plugins(self, defcon):
         """Return all statuses indexed by defcon number."""
         ret = {}
         defcons = [5, 4, 3, 2, 1]
