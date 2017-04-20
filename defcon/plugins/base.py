@@ -3,6 +3,7 @@ import abc
 import uuid
 
 
+# TODO: make that a named tuple with an as_dict() method.
 class Status(dict):
     """Simple class to create statuses."""
 
