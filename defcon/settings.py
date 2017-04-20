@@ -42,10 +42,12 @@ INSTALLED_APPS = (
   'bootstrap3',
   'rest_framework',
   'rest_framework_swagger',
+  'django_prometheus',
   'defcon.status',
 )
 
 MIDDLEWARE_CLASSES = (
+  'django_prometheus.middleware.PrometheusBeforeMiddleware',
   'django.contrib.sessions.middleware.SessionMiddleware',
   'django.middleware.common.CommonMiddleware',
   'django.middleware.csrf.CsrfViewMiddleware',
@@ -54,6 +56,7 @@ MIDDLEWARE_CLASSES = (
   'django.contrib.messages.middleware.MessageMiddleware',
   'django.middleware.clickjacking.XFrameOptionsMiddleware',
   'django.middleware.security.SecurityMiddleware',
+  'django_prometheus.middleware.PrometheusAfterMiddleware',
 )
 
 ROOT_URLCONF = 'defcon.urls'

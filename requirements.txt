@@ -4,6 +4,7 @@ django-emoji
 django-rest-swagger
 djangorestframework
 django-annoying
+django-prometheus
 jsonfield
 
 requests
