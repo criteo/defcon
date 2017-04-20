@@ -25,6 +25,8 @@ class StaticPlugin(base.Plugin):
       },
     }
     ```
+
+    You can also use defcon.plugins.base.Status.
     """
 
     def __init__(self, config=None):
@@ -53,4 +55,9 @@ class StaticPlugin(base.Plugin):
 
     def statuses(self):
         """Return the generated statuses."""
-        return self._config.get('statuses', {})
+        statuses = self._config.get('statuses', {})
+
+        if not isinstance(statuses, dict):
+            statuses = {status.id: status for status in statuses}
+
+        return statuses

@@ -35,4 +35,6 @@ class Command(base.BaseCommand):
                 plugin_obj.statuses.add(status_obj)
 
             action = 'Created' if created else 'Updated'
-            print('%s %s:%s config' % (action, plugin_obj.plugin.name, status_obj.title))
+            print('%s %s:%s config (%s)' % (
+                action, plugin_obj.plugin.name,
+                status_obj.title, status_obj.defcon))

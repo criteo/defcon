@@ -1,4 +1,7 @@
 """Local settings."""
+from defcon.plugins import base
+
+
 SECRET_KEY = 'cepowqjcenwqcnewqoinwqowq'
 DEBUG = True
 
@@ -9,20 +12,10 @@ DEFCON_COMPONENTS = {
         'link': 'https://github.com/iksaif/defcon/wiki/production',
         'contact': 'escalation@iksaif.net',
         'plugins': {
-            'static': {
-                'statuses': {
-                    'a4ce3a48-d3bc-4474-aaf3-52db3d3213f8': {
-                        'defcon': 5,
-                        'title': 'Test status',
-                        'description': 'This is a test status.',
-                        'metadata': '{"foo": "bar"}',
-                        'link': 'http://githun.com/iksaif/defcon',
-                        'time_start': '2017-04-18T08:24:21.920695Z',
-                        'time_end': None,
-                        'override': False,
-                    },
-                },
-            },
+            'static': [
+                base.Status('Test status', 5, 'http://github.com/iksaif/defcon',
+                            description='This is a test'),
+            ]
         },
     },
     'observability': {
