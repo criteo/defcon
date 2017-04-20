@@ -47,9 +47,13 @@ class Command(base.BaseCommand):
             component_obj.plugins.values_list('plugin__id', flat=True))
         updated_plugins = set()
 
-        plugins = sorted(plugins.items())
-        for plugin_id, config in plugins:
-            self.configure_plugin(component_obj, plugin_id, config)
+        for plugin_config in plugins:
+            plugin_id = plugin_config['plugin']
+            name = plugin_config['name']
+            description = plugin_config.get('description', '')
+            config = plugin_config['config']
+            self.configure_plugin(
+                component_obj, plugin_id, name, description, config)
             updated_plugins.add(plugin_id)
 
         removed_plugins = existing_plugins - updated_plugins
@@ -57,16 +61,17 @@ class Command(base.BaseCommand):
             component_obj.plugins.filter(plugin__id=plugin_id).delete()
             print('Removed %s:%s' % (component_obj.name, plugin_id))
 
-    def configure_plugin(self, component_obj, plugin_id, config):
+    def configure_plugin(self, component_obj, plugin_id,
+                         name, description, config):
         """Configure a plugin for a component."""
         try:
             plugin_obj = models.Plugin.objects.get(id=plugin_id)
         except models.Plugin.DoesNotExist:
             raise base.CommandError('Plugin "%s" does not exist' % plugin_id)
 
+        defaults = {'description': description, 'config': config}
         pinstance_obj, created = component_obj.plugins.update_or_create(
-            plugin=plugin_obj, defaults={'config': config}
-        )
+            plugin=plugin_obj, name=name, defaults=defaults)
         pinstance_obj.save()
 
         action = 'Created' if created else 'Updated'

@@ -77,6 +77,8 @@ class Status(models.Model):
 class PluginInstance(models.Model):
     """Instance of a plugin (including settings)."""
 
+    name = models.CharField(max_length=64)
+    description = models.TextField(max_length=254, blank=True)
     plugin = models.ForeignKey(Plugin)
     statuses = models.ManyToManyField(Status, blank=True)
     config = jsonfield.JSONField(null=True)

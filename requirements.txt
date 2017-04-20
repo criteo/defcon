@@ -5,3 +5,5 @@ django-rest-swagger
 djangorestframework
 django-annoying
 jsonfield
+
+requests
