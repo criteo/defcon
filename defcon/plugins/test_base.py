@@ -46,6 +46,8 @@ class StatusTests(test.TestCase):
             'description': 'This is a test',
             'link': 'http://github.com/iksaif/defcon',
             'id': uuid.UUID('971adc54-d615-59b7-a797-2b8167153174'),
+            'time_start': None,
+            'time_end': None,
         }
 
         self.assertEqual(dict(s), expected)
