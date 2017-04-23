@@ -15,7 +15,8 @@ PLUGINS_PRODUCTION = [
         'config': {
             'statuses': [
                 base.Status('Test status', 5, 'http://foo/#5'),
-                base.Status('Other test', 1, 'http://bar/#1')]
+                base.Status('Other test', 2, 'http://bar/#1')
+            ]
         }
     },
     # For a specific job.
@@ -25,6 +26,7 @@ PLUGINS_PRODUCTION = [
         'config': {
             'api': ALERTMANAGER_URL,
             'labels': {'job': 'prometheus'},
+            'defcon': 2,
         }
     },
     # For a specific receiver.
@@ -34,6 +36,7 @@ PLUGINS_PRODUCTION = [
         'config': {
             'api': ALERTMANAGER_URL,
             'receiver': 'default',
+            'defcon': 2,
         }
     },
 ]
