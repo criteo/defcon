@@ -44,7 +44,7 @@ class Command(base.BaseCommand):
         component_obj.save()
 
         existing_plugins = set(
-            component_obj.plugins.values_list('plugin__id', flat=True))
+            component_obj.plugins.values_list('name', flat=True))
         updated_plugins = set()
 
         for plugin_config in plugins:
@@ -54,12 +54,12 @@ class Command(base.BaseCommand):
             config = plugin_config['config']
             self.configure_plugin(
                 component_obj, plugin_id, name, description, config)
-            updated_plugins.add(plugin_id)
+            updated_plugins.add(name)
 
         removed_plugins = existing_plugins - updated_plugins
-        for plugin_id in removed_plugins:
-            component_obj.plugins.filter(plugin__id=plugin_id).delete()
-            print('Removed %s:%s' % (component_obj.name, plugin_id))
+        for name in removed_plugins:
+            component_obj.plugins.filter(name=name).delete()
+            print('Removed %s:%s' % (component_obj.name, name))
 
     def configure_plugin(self, component_obj, plugin_id,
                          name, description, config):

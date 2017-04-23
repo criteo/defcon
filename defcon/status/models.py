@@ -112,20 +112,28 @@ class Component(models.Model):
     contact = models.EmailField(max_length=254)
     plugins = models.ManyToManyField(PluginInstance, blank=True)
 
+    def all_statuses(self):
+        """Return all statuses for a component."""
+        for plugin in self.plugins.all():
+            for status in plugin.statuses.all():
+                yield status
+
     def statuses(self, defcon=None):
         """Return statuses for a specific defcon level."""
         if defcon is None:
             defcon = self.defcon
 
         ret = []
-        for plugin in self.plugins.all():
-            for status in plugin.statuses.all():
-                if status.active and defcon == status.defcon:
-                    ret.append(status)
+        for status in self.all_statuses():
+            if not status.active:
+                continue
+            if defcon != status.defcon:
+                continue
+            ret.append(status)
 
         return ret
 
-    def statuses_by_plugins(self, defcon):
+    def statuses_by_plugins(self):
         """Return all statuses indexed by defcon number."""
         ret = {}
         defcons = [5, 4, 3, 2, 1]
@@ -149,8 +157,23 @@ class Component(models.Model):
     @property
     def defcon(self):
         """Return defcon number."""
-        # TODO look at active status + overrides
-        return 5
+        defcon = 5
+        override = False
+        for status in self.all_statuses():
+            if status.override:
+                # If it's the first override, reset defcon.
+                if override is False:
+                    defcon = status.defcon
+                    override = True
+            else:
+                # If there is an override, account only overrides.
+                if override is True:
+                    continue
+
+            # Else, always take the minimum.
+            defcon = min(status.defcon, defcon)
+
+        return defcon
 
     def __str__(self):
         return self.name

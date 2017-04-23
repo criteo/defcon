@@ -14,7 +14,7 @@
     </span>
   </header>
   <main class="defcon-container">
-    {% for dc, data in component.statuses_by_plugin %}
+    {% for dc, data in component.statuses_by_plugins %}
     <section class="defcon dc{{ dc }} {% if dc == component.defcon %}active{% endif %}">
       <a class="defcon more" href="#dc{{ dc }}-details">More</a>
       <ul>
@@ -27,7 +27,8 @@
 	    {{ status.title }}:
 	    <p>
 	      {{ status.description|truncatewords:20 }}
-	      {% if status.link %} - <a href="{{ status.link }}">link</a>{% endif %}
+	      {% if status.description and status.link %} - {% endif %}
+	      {% if status.link %}<a href="{{ status.link }}">link</a>{% endif %}
 	    </p>
 	  </li>
 	  {% endfor %}

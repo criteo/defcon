@@ -2,6 +2,9 @@
 import abc
 import uuid
 
+from django.utils import timezone
+from datetime import datetime
+
 
 # TODO: make that a named tuple with an as_dict() method.
 class Status(dict):
@@ -20,12 +23,12 @@ class Status(dict):
         s['title'] = title
         s['link'] = link
         s['defcon'] = int(defcon)
-        if description is not None:
-            s['description'] = description
-        if time_start is not None:
-            s['time_start'] = time_start
-        if time_end is not None:
+        s['description'] = description
+        s['time_start'] = time_start
+        if time_end is not None and time_end != timezone.make_aware(datetime.min):
             s['time_end'] = time_end
+        else:
+            s['time_end'] = None
         if override is not None:
             s['override'] = override
 

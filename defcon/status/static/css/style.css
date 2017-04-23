@@ -76,8 +76,8 @@ section.defcon ul {
 
 section.defcon p {
   margin: .3rem 0;
-  white-space: nowrap;
-  overflow: hidden;
+  /* white-space: nowrap; */
+  /* overflow: hidden; */
   text-overflow: clip ellipsis;
 }
 

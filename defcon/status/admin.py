@@ -21,7 +21,7 @@ class PluginAdmin(admin.ModelAdmin):
 class PluginInstanceAdmin(admin.ModelAdmin):
     """Admin for PluginInstance."""
 
-    list_display = ('plugin', 'component', 'created_on', 'modified_on')
+    list_display = ('name', 'plugin', 'component', 'created_on', 'modified_on')
 
 
 @admin.register(models.Status)
