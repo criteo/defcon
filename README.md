@@ -1,4 +1,4 @@
-# defcon
+# DefCon
 
 [![Build Status](https://travis-ci.org/iksaif/defcon.svg?branch=master)](https://travis-ci.org/iksaif/defcon)
 [![Coverage Status](https://coveralls.io/repos/github/iksaif/defcon/badge.svg)](https://coveralls.io/github/iksaif/defcon?branch=master)
@@ -6,7 +6,8 @@
 
 UI and API to show an aggregate status of your services.
 
-TODO: screenshot
+[![DefCon screenshot](doc/defcon.png)](doc/defcon.png)
+
 
 ## API
 
