@@ -8,3 +8,5 @@ django-prometheus
 jsonfield
 
 requests
+
+jinja2
