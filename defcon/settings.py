@@ -134,5 +134,5 @@ DEFCON_PLUGINS = [
 try:
   from defcon.local_settings import *  # noqa
 except ImportError:
-    print("Could not import graphite.local_settings, using defaults!",
+    print("Could not import defcon.local_settings, using defaults!",
           file=sys.stderr)
