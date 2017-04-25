@@ -15,5 +15,4 @@ env:
   - TOXENV=pylama
   - TOXENV=pypy-coverage
   - TOXENV=py27-coverage
-  - TOXENV=py34-coverage
   - TOXENV=py35-coverage

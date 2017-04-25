@@ -19,7 +19,7 @@ class Status(dict):
 
         if id is not None and type(id) != uuid.UUID:
             id = uuid.uuid5(self.NAMESPACE, id)
-        s['id'] = id or uuid.uuid5(uuid.NAMESPACE_URL, link)
+        s['id'] = id or uuid.uuid5(uuid.NAMESPACE_URL, str(link))
         s['title'] = title
         s['link'] = link
         s['defcon'] = int(defcon)

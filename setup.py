@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import os
 from setuptools import find_packages, setup
-from pip.req import parse_requirements
 
 with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
     README = readme.read()
@@ -9,11 +8,24 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
 # allow setup.py to be run from any path
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
-install_requires = parse_requirements('requirements.txt', session='')
-install_requires = [str(v.req) for v in install_requires]
+def _read(relpath):
+    fullpath = os.path.join(os.path.dirname(__file__), relpath)
+    with open(fullpath) as f:
+        return f.read()
 
-test_require = parse_requirements('tests-requirements.txt', session='')
-test_require = [str(v.req) for v in test_require]
+
+def _read_reqs(relpath):
+    fullpath = os.path.join(os.path.dirname(__file__), relpath)
+    with open(fullpath) as f:
+        return [s.strip() for s in f.readlines()
+                if (s.strip() and not s.startswith("#"))]
+
+
+_REQUIREMENTS_TXT = _read_reqs("requirements.txt")
+_TESTS_REQUIREMENTS_TXT = _read_reqs("tests-requirements.txt")
+_DEPENDENCY_LINKS = [l for l in _REQUIREMENTS_TXT if "://" in l]
+_INSTALL_REQUIRES = [l for l in _REQUIREMENTS_TXT if "://" not in l]
+_TEST_REQUIRE = [l for l in _TESTS_REQUIREMENTS_TXT if "://" not in l]
 
 setup(
     name='defcon',
@@ -21,8 +33,9 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     license='GPLv3',
-    install_requires=install_requires,
-    tests_require=test_require,
+    install_requires=_INSTALL_REQUIRES,
+    dependency_links=_DEPENDENCY_LINKS,
+    tests_require=_TEST_REQUIRE,
     description='defcon.',
     long_description=README,
     url='http://github.com/iksaif/defcon',
