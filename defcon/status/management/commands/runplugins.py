@@ -32,7 +32,7 @@ class Command(base.BaseCommand):
 
         try:
             statuses = sorted(plugin.statuses().items())
-        except Exception as e:
+        except Exception:
             logging.exception(
                 "Failed to run %s:%s",
                 component_obj.name, plugin_obj.plugin.name)
