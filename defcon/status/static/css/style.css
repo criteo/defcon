@@ -13,7 +13,7 @@ div#main {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100%;
+  height: 80%;
 }
 
 div#main > header {
@@ -205,4 +205,12 @@ section.defcon.dc4 a.more:before {
 }
 section.defcon.dc5 a.more:before {
   border-color: #1BC98E transparent transparent transparent;
+}
+
+.col-defcon {
+    width: 25em;
+}
+
+.col-defcon .panel-body {
+    overflow: hidden;
 }
