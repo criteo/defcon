@@ -77,8 +77,10 @@ class AlertmanagerPlugin(base.Plugin):
         # TODO: parse stuff an generate status
         data = r.json().get('data', [])
         for root_alert in data:
-            for block in root_alert.get('blocks', []):
-                for alert in block.get('alerts', []):
+            blocks = root_alert.get('blocks', []) or []
+            for block in blocks:
+                alerts = block.get('alerts', []) or []
+                for alert in alerts:
                     status = self._to_status(root_alert, block, alert)
                     if status is not None:
                         ret[status['id']] = status
