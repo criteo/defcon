@@ -41,7 +41,6 @@ class Command(base.BaseCommand):
         for status_id, status in statuses:
             status_obj, created = models.Status.objects.update_or_create(
                 id=status_id, defaults=status)
-            #if created:
             plugin_obj.statuses.add(status_obj)
 
             action = 'Created' if created else 'Updated'
