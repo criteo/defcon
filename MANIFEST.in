@@ -4,3 +4,6 @@ include MANIFEST.in
 # of including them in the source distribution.
 include README.md
 include requirements.txt tests-requirements.txt
+
+recursive-include defcon/status/templates *
+recursive-include defcon/status/static *
