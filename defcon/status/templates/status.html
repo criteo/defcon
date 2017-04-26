@@ -2,6 +2,7 @@
 
 {% load bootstrap3 %}
 {% load staticfiles %}
+{% load defcon %}
 
 {% block title %}{{ component.name }} - DefCon {{ component.defcon }}{% endblock %}
 
@@ -15,29 +16,27 @@
   </header>
   <main class="defcon-container">
     {% for dc, data in component.statuses_by_plugins %}
-    <section class="defcon dc{{ dc }} {% if dc == component.defcon %}active{% endif %}">
+    <section class="defcon dc{{ dc }} {% if dc == component.defcon %}active{% endif %} bg-{{ dc|defcon_to_class }}">
+      <h2>{{ dc|defcon_to_class }}</h2>
       <a class="defcon more" href="#dc{{ dc }}-details">More</a>
       <ul>
-	{% for plugin, statuses in data.items %}
-	<hr/>
-	<h3>{{ plugin.plugin.name }}</h3>
-	<ul>
-	  {% for status in statuses %}
-	  <li>
-	    {{ status.title }}:
-	    <p>
-	      {{ status.description|truncatewords:20 }}
-	      {% if status.description and status.link %} - {% endif %}
-	      {% if status.link %}<a href="{{ status.link }}">link</a>{% endif %}
-	    </p>
-	  </li>
-	  {% endfor %}
-	</ul>
-	{% endfor %}
+	      {% for plugin, statuses in data.items %}
+	      <hr/>
+	      <h3>{{ plugin.plugin.name }} ({{ statuses|length }})</h3>
+	      <ul>
+	        {% for status in statuses %}
+	        <li>
+	          {{ status.title }} - {% if status.link %}<a href="{{ status.link }}">#</a>{% endif %}
+	          <p>
+	            {{ status.description|truncatewords:5 }}
+	          </p>
+	        </li>
+	        {% endfor %}
+	      </ul>
+	      {% endfor %}
       </ul>
     </section>
     {% endfor %}
   </main>
 </div>
 {% endblock %}
-

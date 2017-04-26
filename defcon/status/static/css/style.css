@@ -32,7 +32,7 @@ header > h1 {
 }
 
 .defcon-container {
-  height: 60%;
+  height: 80%;
 
   display: flex;
   flex-direction: row;
@@ -47,6 +47,7 @@ header > h1 {
   flex-grow: 3;
   flex-shrink: 3;
   height: 80%;
+  overflow-y: auto;
 }
 
 section.defcon {
@@ -189,6 +190,7 @@ section.defcon a.more:before{
   border-width: .5rem .5rem 0 .5rem;
   border-color: rgba(255, 255, 255, .3) transparent transparent transparent;
 }
+/* TODO: change that so we can use bootwatch colors */
 section.defcon.dc1 a.more:before {
   border-color: #E64759 transparent transparent transparent;
 }
