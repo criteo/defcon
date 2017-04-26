@@ -19,7 +19,7 @@ class Plugin(models.Model):
     id = models.CharField(
         primary_key=True, max_length=64, validators=[_ID_VALIDATOR])
     name = models.CharField(max_length=64)
-    description = models.TextField(max_length=254, blank=True)
+    description = models.TextField(max_length=254, blank=True, null=True)
     link = models.URLField(max_length=254, blank=True)
     py_module = models.CharField(max_length=255)
 
@@ -41,7 +41,7 @@ class Status(models.Model):
         default=5
     )
     title = models.CharField(max_length=60)
-    description = models.TextField(max_length=254, blank=True)
+    description = models.TextField(max_length=254, blank=True, null=True)
     # To store metadata that will be exposed in the API.
     metadata = jsonfield.JSONField(null=True)
     # Link to the event / documentation.
@@ -78,7 +78,7 @@ class PluginInstance(models.Model):
     """Instance of a plugin (including settings)."""
 
     name = models.CharField(max_length=64)
-    description = models.TextField(max_length=254, blank=True)
+    description = models.TextField(max_length=254, blank=True, null=True)
     plugin = models.ForeignKey(Plugin)
     statuses = models.ManyToManyField(Status, blank=True)
     config = jsonfield.JSONField(null=True)
@@ -107,7 +107,7 @@ class Component(models.Model):
     id = models.CharField(
         primary_key=True, max_length=64, validators=[_ID_VALIDATOR])
     name = models.CharField(max_length=64)
-    description = models.TextField(max_length=254, blank=True)
+    description = models.TextField(max_length=254, blank=True, null=True)
     link = models.URLField(max_length=254)
     contact = models.EmailField(max_length=254)
     plugins = models.ManyToManyField(PluginInstance, blank=True)

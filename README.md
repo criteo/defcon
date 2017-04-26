@@ -18,12 +18,14 @@ See [defcon/plugins/README.md](defcon/plugins/README.md)
 ## Quickstart
 
 ```
-./manage.py migrate
-./manage.py migrate --syncdb
-./manage.py createsuperuser
-./manage.py runserver
+virtualenv venv -p python3
+source venv/bin/activate
 cp examples/local_settings.py defcon/
+./manage.py migrate
+./manage.py migrate --run-syncdb
+./manage.py createsuperuser
 ./manage.py loadplugins
 ./manage.py loadcomponents
 ./manage.py runplugins
+./manage.py runserver
 ```
