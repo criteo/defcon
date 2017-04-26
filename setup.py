@@ -28,7 +28,7 @@ _INSTALL_REQUIRES = [l for l in _REQUIREMENTS_TXT if "://" not in l]
 _TEST_REQUIRE = [l for l in _TESTS_REQUIREMENTS_TXT if "://" not in l]
 
 setup(
-    name='defcon',
+    name='defcon-monitoring',
     version='0.0.1',
     packages=find_packages(),
     include_package_data=True,
