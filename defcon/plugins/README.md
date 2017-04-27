@@ -38,9 +38,25 @@ TBD
 
 TBD
 
-## Prometeus
+## Prometeus Alertmanager
 
-TBD
+Module: `defcon.plugins.alertmanager.AlertmanagerPlugin`
+
+To be used to set defcon based on alerts.
+
+## Static
+
+```python
+{
+  'api': 'http://alertmanager:9090/api/v1', // Url to root API.
+  'receiver': 'default', // Get alerts rooted to this receiver.
+  'labels': {}, // Get alerts matching these labels.
+  'title_template': '{{ labels.alertname }}',
+  'description_template': '{{ annotations }}',
+  'link_template': '{{ generatorURL }}',
+  'defcon': 'label' or int, // Label to use as defcon or raw int.
+}
+```
 
 ## Write you own plugin.
 
