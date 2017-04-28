@@ -60,6 +60,7 @@ See [defcon/plugins/README.md](defcon/plugins/README.md)
 virtualenv venv -p python3
 source venv/bin/activate
 cp examples/local_settings.py defcon/
+pip install -r requirements.txt
 ./manage.py migrate
 ./manage.py migrate --run-syncdb
 ./manage.py createsuperuser
