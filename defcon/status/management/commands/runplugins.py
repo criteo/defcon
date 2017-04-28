@@ -39,11 +39,18 @@ class Command(base.BaseCommand):
             return
 
         for status_id, status in statuses:
-            status_obj, created = models.Status.objects.update_or_create(
-                id=status_id, defaults=status)
-            plugin_obj.statuses.add(status_obj)
+            try:
+                status_obj, created = models.Status.objects.update_or_create(
+                    id=status_id, defaults=status)
 
-            action = 'Created' if created else 'Updated'
-            print('%s %s:%s config (%s)' % (
-                action, plugin_obj.plugin.name,
-                status_obj.title, status_obj.defcon))
+                if created:
+                    plugin_obj.statuses.add(status_obj)
+            except Exception:
+                logging.exception(
+                    "Failed to save status with id #%s",
+                    status_id)
+            else:
+                action = 'Created' if created else 'Updated'
+                print('%s %s:%s config (%s)' % (
+                    action, plugin_obj.plugin.name,
+                    status_obj.title, status_obj.defcon))
