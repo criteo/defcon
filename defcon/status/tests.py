@@ -1,4 +1,5 @@
 """Tests for defcon.status."""
+import copy
 import io
 import unittest.mock
 
@@ -97,3 +98,130 @@ class TestLoadPluginsCommand(test.TestCase):
             management.call_command('loadplugins', stdout=out)
             self.assertIn('Removed', out.getvalue())
             self.assertEqual(0, len(models.Plugin.objects.all()))
+
+
+DEFCON_COMPONENTS = {
+    'production': {
+        'name': 'Production',
+        'description': 'All the production perimeter.',
+        'link': 'https://github.com/iksaif/defcon/wiki/production',
+        'contact': 'escalation@iksaif.net',
+        'plugins': [],
+    },
+}
+
+@test.utils.override_settings(DEFCON_PLUGINS=DEFCON_PLUGINS)
+class TestLoadComponentsCommand(test.TestCase):
+    def setUp(self):
+        with io.StringIO() as out:
+            management.call_command('loadplugins', stdout=out)
+
+    def test_add_component(self):
+        out = io.StringIO()
+        self.addCleanup(out.close)
+        components = copy.deepcopy(DEFCON_COMPONENTS)
+        component = components['production']
+
+        with self.settings(DEFCON_COMPONENTS=components):
+            management.call_command("loadcomponents", stdout=out)
+            self.assertIn("Created %s" % component["name"], out.getvalue())
+
+            component_model = models.Component.objects.get(id="production")
+            self.assertEqual(component_model.name, component["name"])
+            self.assertEqual(component_model.description,
+                             component["description"])
+            self.assertEqual(component_model.link, component["link"])
+            self.assertEqual(component_model.contact, component["contact"])
+
+    def test_add_component_with_plugins(self):
+        out = io.StringIO()
+        self.addCleanup(out.close)
+        components = copy.deepcopy(DEFCON_COMPONENTS)
+        plugin = {
+            'plugin': 'fake',
+            'name': 'test',
+            'description': 'test plugin instance',
+            'config': {'statuses': []},
+        }
+        components['production']['plugins'].append(plugin)
+
+        with self.settings(DEFCON_COMPONENTS=components):
+            management.call_command("loadcomponents", stdout=out)
+            self.assertIn("Created Production:Fake", out.getvalue())
+
+            component_model = models.Component.objects.get(id="production")
+            plugin_model = component_model.plugins.first()
+            self.assertEqual(plugin_model.name, plugin['name'])
+            self.assertEqual(plugin_model.description, plugin['description'])
+            self.assertEqual(plugin_model.plugin.id, plugin['plugin'])
+            self.assertEqual(plugin_model.config, plugin['config'])
+
+    def test_remove_component(self):
+        out = io.StringIO()
+        self.addCleanup(out.close)
+        components = copy.deepcopy(DEFCON_COMPONENTS)
+
+        with self.settings(DEFCON_COMPONENTS=components):
+            management.call_command("loadcomponents", stdout=out)
+
+        with self.settings(DEFCON_COMPONENTS={}):
+            management.call_command("loadcomponents", stdout=out)
+            self.assertIn('Removed production', out.getvalue())
+            self.assertEqual(0, len(models.Component.objects.all()))
+
+    def test_update_component(self):
+        out = io.StringIO()
+        self.addCleanup(out.close)
+        components = copy.deepcopy(DEFCON_COMPONENTS)
+        component = components['production']
+
+        with self.settings(DEFCON_COMPONENTS=components):
+            management.call_command("loadcomponents", stdout=out)
+
+            component['description'] = 'Updated description'
+            management.call_command("loadcomponents", stdout=out)
+            self.assertIn("Updated Production", out.getvalue())
+
+            component_model = models.Component.objects.get(id="production")
+            self.assertEqual(component_model.description,
+                             component['description'])
+
+    def test_update_component_plugins(self):
+        out = io.StringIO()
+        self.addCleanup(out.close)
+        components = copy.deepcopy(DEFCON_COMPONENTS)
+        component = components['production']
+        plugin = {
+            'plugin': 'fake',
+            'name': 'test',
+            'description': 'test plugin instance',
+            'config': {'statuses': []},
+        }
+
+        component['plugins'].append(plugin)
+
+        with self.settings(DEFCON_COMPONENTS=components):
+            management.call_command("loadcomponents", stdout=out)
+
+            other_plugin =plugin.copy()
+            other_plugin['name'] = "test2"
+            plugin['description'] = 'updated description'
+            component['plugins'].append(other_plugin)
+
+            management.call_command("loadcomponents", stdout=out)
+            component_model = models.Component.objects.get(id="production")
+
+            test_plugin = test2_plugin = None
+
+            for plugin_model in component_model.plugins.all():
+                if plugin_model.name == "test":
+                    test_plugin = plugin_model
+                elif plugin_model.name == "test2":
+                    test2_plugin = plugin_model
+                else:
+                    self.fail("Plugin %s must not exist" % plugin_model.name)
+
+            if not (test_plugin and test2_plugin):
+                self.fail("one plugin is missing")
+
+            self.assertEqual(test_plugin.description, plugin['description'])
