@@ -1,17 +1,27 @@
 """Tests for defcon.status."""
 import contextlib
 import copy
-import io
-import unittest.mock
+import sys
+
+try:
+    from unittest import mock
+except ImportError:
+    import mock
 
 from django import test
 from django.core import management
 from django.utils import timezone
 
-from defcon import plugins
-from defcon.plugins import base
+from defcon.plugins import base, static
 from defcon.status import models
 from defcon.status import views
+
+if sys.version_info < (3, ):
+    import StringIO as _StringIO
+    StringIO = _StringIO.StringIO
+else:
+    import io
+    StringIO = io.StringIO
 
 
 class ModelTest(test.TestCase):
@@ -44,7 +54,7 @@ class ViewTest(test.TestCase):
         views.ComponentViewSet()
 
 
-class FakePlugin(plugins.static.StaticPlugin):
+class FakePlugin(static.StaticPlugin):
     @property
     def short_name(self):
         return 'fake'
@@ -63,7 +73,7 @@ class TestLoadPluginsCommand(test.TestCase):
     Test the run plugins command
     """
     def test_add_plugin(self):
-        out = io.StringIO()
+        out = StringIO()
         self.addCleanup(out.close)
         management.call_command('loadplugins', stdout=out)
 
@@ -78,11 +88,11 @@ class TestLoadPluginsCommand(test.TestCase):
         self.assertEqual(plugin_model.py_module, DEFCON_PLUGINS[0])
 
     def test_update_plugin(self):
-        out = io.StringIO()
+        out = StringIO()
         self.addCleanup(out.close)
         management.call_command('loadplugins', stdout=out)
 
-        with unittest.mock.patch.object(FakePlugin, "name", "Updated Fake"):
+        with mock.patch.object(FakePlugin, "name", "Updated Fake"):
             management.call_command('loadplugins', stdout=out)
 
             plugin = FakePlugin()
@@ -92,7 +102,7 @@ class TestLoadPluginsCommand(test.TestCase):
             self.assertEqual(plugin_model.name, plugin.name)
 
     def test_remove_plugin(self):
-        out = io.StringIO()
+        out = StringIO()
         self.addCleanup(out.close)
         management.call_command('loadplugins', stdout=out)
 
@@ -116,11 +126,12 @@ DEFCON_COMPONENTS = {
 @test.utils.override_settings(DEFCON_PLUGINS=DEFCON_PLUGINS)
 class TestLoadComponentsCommand(test.TestCase):
     def setUp(self):
-        with io.StringIO() as out:
-            management.call_command('loadplugins', stdout=out)
+        out = StringIO()
+        self.addCleanup(out.close)
+        management.call_command('loadplugins', stdout=out)
 
     def test_add_component(self):
-        out = io.StringIO()
+        out = StringIO()
         self.addCleanup(out.close)
         components = copy.deepcopy(DEFCON_COMPONENTS)
         component = components['production']
@@ -137,7 +148,7 @@ class TestLoadComponentsCommand(test.TestCase):
             self.assertEqual(component_model.contact, component["contact"])
 
     def test_add_component_with_plugins(self):
-        out = io.StringIO()
+        out = StringIO()
         self.addCleanup(out.close)
         components = copy.deepcopy(DEFCON_COMPONENTS)
         plugin = {
@@ -160,7 +171,7 @@ class TestLoadComponentsCommand(test.TestCase):
             self.assertEqual(plugin_model.config, plugin['config'])
 
     def test_remove_component(self):
-        out = io.StringIO()
+        out = StringIO()
         self.addCleanup(out.close)
         components = copy.deepcopy(DEFCON_COMPONENTS)
 
@@ -173,7 +184,7 @@ class TestLoadComponentsCommand(test.TestCase):
             self.assertEqual(0, len(models.Component.objects.all()))
 
     def test_update_component(self):
-        out = io.StringIO()
+        out = StringIO()
         self.addCleanup(out.close)
         components = copy.deepcopy(DEFCON_COMPONENTS)
         component = components['production']
@@ -190,7 +201,7 @@ class TestLoadComponentsCommand(test.TestCase):
                              component['description'])
 
     def test_update_component_plugins(self):
-        out = io.StringIO()
+        out = StringIO()
         self.addCleanup(out.close)
         components = copy.deepcopy(DEFCON_COMPONENTS)
         component = components['production']
@@ -233,12 +244,13 @@ class TestLoadComponentsCommand(test.TestCase):
 @test.utils.override_settings(DEFCON_PLUGINS=DEFCON_PLUGINS)
 class TestRunPluginsCommand(test.TestCase):
     def setUp(self):
-        with io.StringIO() as out:
-            management.call_command('loadplugins', stdout=out)
+        out = StringIO()
+        self.addCleanup(out.close)
+        management.call_command('loadplugins', stdout=out)
 
     @test.utils.override_settings(DEFCON_COMPONENTS=DEFCON_COMPONENTS)
     def test_run_without_plugins(self):
-        out = io.StringIO()
+        out = StringIO()
         self.addCleanup(out.close)
 
         management.call_command('runplugins', stdout=out)
@@ -255,12 +267,14 @@ class TestRunPluginsCommand(test.TestCase):
         }
         components['production']['plugins'].append(plugin)
 
-        with io.StringIO() as out, self.settings(DEFCON_COMPONENTS=components):
+        out = StringIO()
+        self.addCleanup(out.close)
+        with self.settings(DEFCON_COMPONENTS=components):
             management.call_command('loadcomponents', stdout=out)
             yield components
 
     def test_run_add_status(self):
-        out = io.StringIO()
+        out = StringIO()
         self.addCleanup(out.close)
         status = base.Status('Test status', 5, 'http://foo/#5')
 
@@ -278,7 +292,7 @@ class TestRunPluginsCommand(test.TestCase):
             self.assertFalse(status_model.override)
 
     def test_run_update_status(self):
-        out = io.StringIO()
+        out = StringIO()
         self.addCleanup(out.close)
         status = base.Status('Test status', 5, 'http://foo/#5')
 
