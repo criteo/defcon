@@ -29,7 +29,7 @@ class Command(base.BaseCommand):
         removed_plugins = existing_plugins - updated_plugins
         for py_module in removed_plugins:
             models.Plugin.objects.filter(py_module=py_module).delete()
-            print('Removed %s' % py_module)
+            self.stdout.write('Removed %s' % py_module)
 
     def add_plugin(self, py_module):
         """Add a plugin."""
@@ -47,4 +47,6 @@ class Command(base.BaseCommand):
             py_module=py_module, defaults=defaults)
 
         action = 'Created' if created else 'Updated'
-        print('%s %s:%s config' % (action, plugin_obj.name, plugin_obj.py_module))
+        self.stdout.write(self.style.SUCCESS(
+            '%s %s:%s config' % (action, plugin_obj.name, plugin_obj.py_module)
+        ))

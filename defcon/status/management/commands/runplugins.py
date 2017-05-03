@@ -25,7 +25,7 @@ class Command(base.BaseCommand):
 
     def run_plugin(self, component_obj, plugin_obj):
         """Add a plugin."""
-        print('Running %s %s:%s' % (
+        self.stdout.write('Running %s %s:%s' % (
             plugin_obj.name, component_obj.name, plugin_obj.plugin.name))
         plugin_class = module_loading.import_string(plugin_obj.plugin.py_module)
         plugin = plugin_class(plugin_obj.config)
@@ -39,11 +39,19 @@ class Command(base.BaseCommand):
             return
 
         for status_id, status in statuses:
-            status_obj, created = models.Status.objects.update_or_create(
-                id=status_id, defaults=status)
-            plugin_obj.statuses.add(status_obj)
+            try:
+                status_obj, created = models.Status.objects.update_or_create(
+                    id=status_id, defaults=status)
 
-            action = 'Created' if created else 'Updated'
-            print('%s %s:%s config (%s)' % (
-                action, plugin_obj.plugin.name,
-                status_obj.title, status_obj.defcon))
+                if created:
+                    plugin_obj.statuses.add(status_obj)
+            except Exception:
+                logging.exception(
+                    "Failed to save status with id #%s",
+                    status_id)
+            else:
+                action = 'Created' if created else 'Updated'
+                self.stdout.write(self.style.SUCCESS(
+                    '%s %s:%s config (%s)' % (action, plugin_obj.plugin.name,
+                                              status_obj.title,
+                                              status_obj.defcon)))

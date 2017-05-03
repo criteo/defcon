@@ -28,19 +28,19 @@ class Command(base.BaseCommand):
         removed_components = existing_components - updated_components
         for cid in removed_components:
             models.Component.objects.filter(id=cid).delete()
-            print('Removed %s' % cid)
+            self.stdout.write('Removed %s' % cid)
 
     def add_component(self, cid, component):
         """Add one component."""
         plugins = component['plugins']
+        component = component.copy()
         del component['plugins']
+
         component_obj, created = models.Component.objects.update_or_create(
-            id=cid,
-            defaults=component
-        )
+            id=cid, defaults=component)
 
         action = 'Created' if created else 'Updated'
-        print('%s %s' % (action, component_obj))
+        self.stdout.write(self.style.SUCCESS('%s %s' % (action, component_obj)))
         component_obj.save()
 
         existing_plugins = set(
@@ -59,7 +59,7 @@ class Command(base.BaseCommand):
         removed_plugins = existing_plugins - updated_plugins
         for name in removed_plugins:
             component_obj.plugins.filter(name=name).delete()
-            print('Removed %s:%s' % (component_obj.name, name))
+            self.stdout.write('Removed %s:%s' % (component_obj.name, name))
 
     def configure_plugin(self, component_obj, plugin_id,
                          name, description, config):
@@ -75,4 +75,5 @@ class Command(base.BaseCommand):
         pinstance_obj.save()
 
         action = 'Created' if created else 'Updated'
-        print('%s %s:%s config' % (action, component_obj.name, plugin_obj.name))
+        self.stdout.write(self.style.SUCCESS(
+            '%s %s:%s config' % (action, component_obj.name, plugin_obj.name)))
