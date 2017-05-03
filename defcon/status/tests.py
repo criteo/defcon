@@ -1,4 +1,5 @@
 """Tests for defcon.status."""
+import contextlib
 import copy
 import io
 import unittest.mock
@@ -8,6 +9,7 @@ from django.core import management
 from django.utils import timezone
 
 from defcon import plugins
+from defcon.plugins import base
 from defcon.status import models
 from defcon.status import views
 
@@ -52,7 +54,7 @@ class FakePlugin(plugins.static.StaticPlugin):
         return 'Fake plugin'
 
 
-DEFCON_PLUGINS=['defcon.status.tests.FakePlugin']
+DEFCON_PLUGINS = ['defcon.status.tests.FakePlugin']
 
 
 @test.utils.override_settings(DEFCON_PLUGINS=DEFCON_PLUGINS)
@@ -109,6 +111,7 @@ DEFCON_COMPONENTS = {
         'plugins': [],
     },
 }
+
 
 @test.utils.override_settings(DEFCON_PLUGINS=DEFCON_PLUGINS)
 class TestLoadComponentsCommand(test.TestCase):
@@ -203,7 +206,7 @@ class TestLoadComponentsCommand(test.TestCase):
         with self.settings(DEFCON_COMPONENTS=components):
             management.call_command("loadcomponents", stdout=out)
 
-            other_plugin =plugin.copy()
+            other_plugin = plugin.copy()
             other_plugin['name'] = "test2"
             plugin['description'] = 'updated description'
             component['plugins'].append(other_plugin)
@@ -225,3 +228,67 @@ class TestLoadComponentsCommand(test.TestCase):
                 self.fail("one plugin is missing")
 
             self.assertEqual(test_plugin.description, plugin['description'])
+
+
+@test.utils.override_settings(DEFCON_PLUGINS=DEFCON_PLUGINS)
+class TestRunPluginsCommand(test.TestCase):
+    def setUp(self):
+        with io.StringIO() as out:
+            management.call_command('loadplugins', stdout=out)
+
+    @test.utils.override_settings(DEFCON_COMPONENTS=DEFCON_COMPONENTS)
+    def test_run_without_plugins(self):
+        out = io.StringIO()
+        self.addCleanup(out.close)
+
+        management.call_command('runplugins', stdout=out)
+        self.assertEqual("", out.getvalue())
+
+    @contextlib.contextmanager
+    def components_with_plugin(self, *statuses):
+        components = copy.deepcopy(DEFCON_COMPONENTS)
+        plugin = {
+            'plugin': 'fake',
+            'name': 'test',
+            'description': 'test plugin instance',
+            'config': {'statuses': statuses},
+        }
+        components['production']['plugins'].append(plugin)
+
+        with io.StringIO() as out, self.settings(DEFCON_COMPONENTS=components):
+            management.call_command('loadcomponents', stdout=out)
+            yield components
+
+    def test_run_add_status(self):
+        out = io.StringIO()
+        self.addCleanup(out.close)
+        status = base.Status('Test status', 5, 'http://foo/#5')
+
+        with self.components_with_plugin(status):
+            management.call_command('runplugins', stdout=out)
+            self.assertIn("Running test Production:Fake plugin", out.getvalue())
+            self.assertIn("Created Fake plugin:Test status", out.getvalue())
+
+            status_model = models.Status.objects.get(id=status['id'])
+
+            self.assertEqual(status_model.title, status['title'])
+            self.assertEqual(status_model.link, status['link'])
+            self.assertEqual(status_model.description, status['description'])
+            self.assertEqual(status_model.defcon, status['defcon'])
+            self.assertFalse(status_model.override)
+
+    def test_run_update_status(self):
+        out = io.StringIO()
+        self.addCleanup(out.close)
+        status = base.Status('Test status', 5, 'http://foo/#5')
+
+        with self.components_with_plugin(status):
+            management.call_command('runplugins', stdout=out)
+
+            status.description = 'status description'
+            management.call_command('runplugins', stdout=out)
+            self.assertIn("Running test Production:Fake plugin", out.getvalue())
+            self.assertIn("Updated Fake plugin:Test status", out.getvalue())
+
+            status_model = models.Status.objects.get(id=status['id'])
+            self.assertEqual(status_model.description, status['description'])
