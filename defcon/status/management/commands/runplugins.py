@@ -48,7 +48,7 @@ class Command(base.BaseCommand):
                 if created:
                     plugin_obj.statuses.add(status_obj)
             except Exception:
-                msg =  "Failed to save status with id #%s" % status_id
+                msg = "Failed to save status with id #%s" % status_id
                 logging.exception(msg)
                 self.stderr.write(self.style.ERROR(msg))
             else:

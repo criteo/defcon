@@ -9,8 +9,6 @@ from defcon.plugins import jira
 
 @httmock.urlmatch(netloc=r'(.*\.)?jira\.foo')
 def _jira_mock(url, request):
-    import sys
-
     if url.path == '/rest/api/2/serverInfo':
         filename = 'spec_jira_handshake.json'
     elif url.path == '/rest/api/2/field':
@@ -19,7 +17,7 @@ def _jira_mock(url, request):
         filename = 'spec_jira_search.json'
     else:
         raise Exception(url)
-    filename =  os.path.join(os.path.dirname(__file__), filename)
+    filename = os.path.join(os.path.dirname(__file__), filename)
     return open(filename).read()
 
 

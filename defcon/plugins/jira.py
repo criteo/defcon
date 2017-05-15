@@ -1,10 +1,10 @@
 """DefCon Prometheus Jira plugin."""
-import requests
+from __future__ import absolute_import
+
 import logging
 import jinja2
 import jira
 
-from django.utils import dateparse
 from defcon.plugins import base
 
 
