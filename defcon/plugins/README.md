@@ -36,7 +36,21 @@ TBD
 
 ## Jira
 
-TBD
+Module: `defcon.plugins.jira.JiraPlugin`
+
+```python
+{
+  'url': 'http://jira', // Url to root API.
+  'username': 'foo',
+  'password': 'bar',
+  'jql': {},            // Get tickets matching this jql.
+  'max_results': 5,
+  'title_template': '{{ labels.alertname }}',
+  'description_template': '{{ annotations }}',
+  'link_template': '{{ generatorURL }}',
+  'defcon': callback or int, // raw int or callback returning defcon
+}
+```
 
 ## Prometeus Alertmanager
 

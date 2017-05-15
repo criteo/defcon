@@ -33,9 +33,11 @@ class Command(base.BaseCommand):
         try:
             statuses = sorted(plugin.statuses().items())
         except Exception:
-            logging.exception(
-                "Failed to run %s:%s",
-                component_obj.name, plugin_obj.plugin.name)
+            msg = (
+                "Failed to run %s:%s" %
+                (component_obj.name, plugin_obj.plugin.name))
+            logging.exception(msg)
+            self.stderr.write(self.style.ERROR(msg))
             return
 
         for status_id, status in statuses:
@@ -46,9 +48,9 @@ class Command(base.BaseCommand):
                 if created:
                     plugin_obj.statuses.add(status_obj)
             except Exception:
-                logging.exception(
-                    "Failed to save status with id #%s",
-                    status_id)
+                msg =  "Failed to save status with id #%s" % status_id
+                logging.exception(msg)
+                self.stderr.write(self.style.ERROR(msg))
             else:
                 action = 'Created' if created else 'Updated'
                 self.stdout.write(self.style.SUCCESS(

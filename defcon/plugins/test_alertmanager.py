@@ -15,7 +15,7 @@ def _alertmanager_mock(url, request):
     return open(filename).read()
 
 
-class PluginsTests(test.TestCase):
+class AlertmanagerPluginTests(test.TestCase):
     """Test the plugins."""
 
     _API_URL = 'http://foo.alertmanager.io/api/v1/'
