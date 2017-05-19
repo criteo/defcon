@@ -128,7 +128,7 @@ BOOTSTRAP3 = {
 DEFCON_COMPONENTS = {}
 
 DEFCON_PLUGINS = [
-    'defcon.plugins.static',
+    'defcon.plugins.static.StaticPlugin',
 ]
 
 try:

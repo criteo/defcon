@@ -2,6 +2,7 @@
 import uuid
 import collections
 
+import picklefield.fields as picklefield
 import jsonfield
 
 from django.db import models
@@ -81,7 +82,7 @@ class PluginInstance(models.Model):
     description = models.TextField(max_length=254, blank=True, null=True)
     plugin = models.ForeignKey(Plugin)
     statuses = models.ManyToManyField(Status, blank=True)
-    config = jsonfield.JSONField(null=True)
+    config = picklefield.PickledObjectField(null=True)
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True)
 

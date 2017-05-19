@@ -2,6 +2,7 @@ django
 django-bootstrap3
 django-emoji
 django-rest-swagger
+django-picklefield
 djangorestframework
 django-annoying
 django-prometheus
