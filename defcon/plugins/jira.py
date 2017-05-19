@@ -21,7 +21,7 @@ class JiraPlugin(base.Plugin):
       'max_results': 5,
       'title_template': '{{ labels.alertname }}',
       'description_template': '{{ annotations }}',
-      'link_template': '{{ generatorURL }}',
+      'link_template': '{{ me }}',
       'defcon': callback or int, // raw int or callback returning defcon
     }
     ```
@@ -34,14 +34,14 @@ class JiraPlugin(base.Plugin):
             config = {}
 
         self.title_template = config.get(
-            'title_template', '{{ fields.summary }}'
+            'title_template', '{{ key }} - {{ fields.summary }}'
         )
         self.description_template = config.get(
             'description_template',
             '{{ fields.description }}'
         )
         self.link_template = config.get(
-            'link_template', '{{ me }}')
+            'link_template', '{{ permalink }}')
         self.receiver = config.get('receiver', None)
         self.labels = config.get('labels', None)
         self.max_results = config.get('max_results', 5)
@@ -108,6 +108,8 @@ class JiraPlugin(base.Plugin):
 
         data = dict(issue.raw)
         data['me'] = data['self']
+        data['issue'] = issue
+        data['permalink'] = issue.permalink()
         del data['self']
         status = base.Status(
             self.render(self.title_template, data),
