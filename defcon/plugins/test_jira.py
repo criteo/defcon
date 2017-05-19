@@ -46,5 +46,5 @@ class JiraPluginTests(test.TestCase):
             statuses = sorted(p.statuses().values())
             status = statuses[0]
 
-            self.assertEqual(status['title'], 'Test')
+            self.assertEqual(status['title'], 'FOO-1 - Test')
             self.assertEqual(status['defcon'], 3)

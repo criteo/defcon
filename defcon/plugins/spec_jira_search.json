@@ -1,1 +1,1 @@
-{"issues": [{"self": "http://foo/FOO-1", "fields": {"summary": "Test"}}]}
+{"issues": [{"self": "http://foo/FOO-1", "key": "FOO-1", "fields": {"summary": "Test"}}]}
