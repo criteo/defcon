@@ -115,7 +115,7 @@ class AlertmanagerPlugin(base.Plugin):
         if self.receiver is not None:
             if block['routeOpts']['receiver'] != self.receiver:
                 return None
-        if alert['inhibited'] or alert.get('silenced'):
+        if alert.get('inhibited') or alert.get('silenced'):
             logging.debug('alert is inactived')
             return None
 
