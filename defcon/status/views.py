@@ -16,6 +16,13 @@ class DefConViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.ComponentFullSerializer
 
 
+class SimpleViewSet(viewsets.ReadOnlyModelViewSet):
+    """API view for Component with expanded statuses."""
+
+    queryset = models.Component.objects.all()
+    serializer_class = serializers.ComponentSimpleSerializer
+
+
 class ComponentViewSet(viewsets.ModelViewSet):
     """API view for Component."""
 

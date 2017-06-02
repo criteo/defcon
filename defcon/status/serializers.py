@@ -15,6 +15,15 @@ class ComponentSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
+class ComponentSimpleSerializer(ComponentSerializer):
+    """Serializer for Component."""
+
+    class Meta(ComponentSerializer.Meta):
+        """Configuration."""
+
+        fields = ['name', 'contact', 'link', 'defcon', 'description']
+
+
 class PluginSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for Plugin."""
 
@@ -45,23 +54,13 @@ class StatusSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 
-class StatusFullSerializer(serializers.HyperlinkedModelSerializer):
-    """Serializer for Status."""
-
-    class Meta:
-        """Configuration."""
-
-        model = models.Status
-        fields = '__all__'
-
-
 # Bellow are serializers for the simple /defcon/ API.
 
 
 class PluginInstanceFullSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for PluginInstance with expanded content."""
 
-    statuses = StatusFullSerializer(many=True)
+    statuses = StatusSerializer(many=True)
 
     class Meta:
         """Configuration."""
@@ -76,7 +75,7 @@ class ComponentFullSerializer(serializers.HyperlinkedModelSerializer):
     plugins = PluginInstanceFullSerializer(many=True)
 
     # Statuses for current defcon level.
-    statuses = StatusFullSerializer(many=True)
+    statuses = StatusSerializer(many=True)
     defcon = serializers.IntegerField()
 
     class Meta:

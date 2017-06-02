@@ -8,6 +8,7 @@ from defcon.status import views
 
 router = routers.DefaultRouter()
 router.register(r'defcon', views.DefConViewSet, 'defcon')
+router.register(r'simple', views.SimpleViewSet, 'simple')
 router.register(r'components', views.ComponentViewSet)
 router.register(r'status', views.StatusViewSet)
 router.register(r'plugin', views.PluginViewSet)
