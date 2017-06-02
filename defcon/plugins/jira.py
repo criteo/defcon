@@ -81,7 +81,7 @@ class JiraPlugin(base.Plugin):
             return ret
 
         basic_auth = (self.username, self.password)
-        client = jira.JIRA(self.url, basic_auth=basic_auth)
+        client = jira.JIRA(self.url, basic_auth=basic_auth, timeout=5)
 
         issues = client.search_issues(self.jql, maxResults=self.max_results)
         for issue in issues:
