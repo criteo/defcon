@@ -67,3 +67,10 @@ def status(request, component_id):
     """Display a specific component."""
     component = shortcuts.get_object_or_404(models.Component, pk=component_id)
     return {'component': component}
+
+
+@an_decorators.render_to('badge.svg', content_type="image/svg+xml")
+def badge(request, component_id):
+    """Display a badge for a specific component."""
+    component = shortcuts.get_object_or_404(models.Component, pk=component_id)
+    return {'component': component}

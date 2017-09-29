@@ -13,6 +13,7 @@
     <span>
       Current state of <strong id="perimeter">{{ component.name }}</strong> is:
     </span>
+    <img src="/badge/{{component.id}}.svg" />
   </header>
   <main class="defcon-container">
     {% for dc, data in component.statuses_by_plugins %}

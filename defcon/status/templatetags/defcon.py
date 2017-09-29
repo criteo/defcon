@@ -16,3 +16,16 @@ def defcon_to_class(value):
         1: 'danger'
     }
     return MAP.get(value, 'unknown')
+
+
+@register.filter
+def defcon_to_color(value):
+    """Convert a defcon status to a bootstrap message level."""
+    MAP = {
+        5: '#97CA00',
+        4: '#a4a61d',
+        3: '#dfb317',
+        2: '#fe7d37',
+        1: '#e05d44',
+    }
+    return MAP.get(value, 'unknown')
