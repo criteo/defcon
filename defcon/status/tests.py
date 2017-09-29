@@ -1,4 +1,7 @@
 """Tests for defcon.status."""
+
+# pylama:ignore=D102,D101
+
 import contextlib
 import copy
 import sys
@@ -69,9 +72,8 @@ DEFCON_PLUGINS = ['defcon.status.tests.FakePlugin']
 
 @test.utils.override_settings(DEFCON_PLUGINS=DEFCON_PLUGINS)
 class TestLoadPluginsCommand(test.TestCase):
-    """
-    Test the run plugins command
-    """
+    """Test the run plugins command."""
+
     def test_add_plugin(self):
         out = StringIO()
         self.addCleanup(out.close)

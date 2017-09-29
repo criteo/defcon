@@ -73,7 +73,7 @@ class Plugin(object):
     def statuses(self):
         """Return a list of statuses.
 
-        Returns:
+        Return:
           dict(uuid.UUID: defcon.plugins.base.Status).
         """
         return {}
