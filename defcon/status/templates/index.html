@@ -20,7 +20,7 @@
           </div>
           <div class="panel-body">
 	          <span class="label label-{{ component.defcon|defcon_to_class }} pull-right">
-	            DefCon {{ component.defcon }}
+	            DefCon {{ component.defcon }} - {{ component.defcon|defcon_to_word }}
 	          </span>
 	          {% if component.descrition %}
 	          <p>
