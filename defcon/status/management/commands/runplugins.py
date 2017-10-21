@@ -2,6 +2,7 @@
 import logging
 
 from django.utils import module_loading
+from django.utils import timezone
 from django.core.management import base
 
 from defcon.status import models
@@ -19,9 +20,21 @@ class Command(base.BaseCommand):
     def handle(self, *args, **options):
         """Run the command."""
         # TODO: add filters by components and plugins.
+
+        # Get the status that haven't expired yet to make them expire if
+        # they disapeared.
+        now = timezone.now()
+        existing_statuses = set(models.Status.objects.filter(
+            time_end__gte=now).values_list('id', flat=True))
+        updated_statuses = set()
+
         for component_obj in models.Component.objects.all():
             for plugin_obj in component_obj.plugins.all():
-                self.run_plugin(component_obj, plugin_obj)
+                updated_statuses |= self.run_plugin(component_obj, plugin_obj)
+
+        expired_statuses = (existing_statuses - updated_statuses)
+        print (expired_statuses)
+        models.Status.objects.filter(id__in=expired_statuses).update(time_end=now)
 
     def run_plugin(self, component_obj, plugin_obj):
         """Add a plugin."""
@@ -38,10 +51,11 @@ class Command(base.BaseCommand):
                 (component_obj.name, plugin_obj.plugin.name))
             logging.exception(msg)
             self.stderr.write(self.style.ERROR(msg))
-            return
+            return set()
 
         for status_id, status in statuses:
             self._save_status(plugin_obj, status_id, status)
+        return set([status_id for status_id, _ in statuses])
 
     def _save_status(self, plugin_obj, status_id, status):
         """Save a status."""

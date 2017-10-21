@@ -28,4 +28,4 @@ class PluginInstanceAdmin(admin.ModelAdmin):
 class StatusAdmin(admin.ModelAdmin):
     """Admin for Status."""
 
-    list_display = ('id', 'title', 'created_on', 'modified_on')
+    list_display = ('id', 'title', 'created_on', 'modified_on', 'active')

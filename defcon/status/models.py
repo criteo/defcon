@@ -1,6 +1,7 @@
 """Models for defcon.status."""
 import uuid
 import collections
+import datetime
 
 import picklefield.fields as picklefield
 import jsonfield
@@ -28,8 +29,16 @@ class Plugin(models.Model):
         return self.name
 
 
+def _default_time_end():
+    return timezone.now() + Status.DEFAULT_ACTIVE_DURATION
+
+
 class Status(models.Model):
     """A status linked to a plugin instance."""
+
+    # By default statuses are active for 60min
+    # Which means that they will not dispear immediately.
+    DEFAULT_ACTIVE_DURATION = datetime.timedelta(0, 3600)
 
     # A stable id for each individual event.
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -50,7 +59,8 @@ class Status(models.Model):
     # Will be used to know if the event is still active or not, useful
     # for scheduled events.
     time_start = models.DateTimeField(auto_now=True)
-    time_end = models.DateTimeField(blank=True, null=True)
+    time_end = models.DateTimeField(blank=True, null=True,
+                                    default=_default_time_end)
     # Set to True if this overrides any over existing status. Useful to
     # force a downgrade of defcon status.
     override = models.BooleanField(default=False)
@@ -61,18 +71,28 @@ class Status(models.Model):
     def active(self):
         """Return True if active now."""
         now = timezone.now()
+        time_end = self.time_end
+        if not time_end:
+            time_end = self.time_start + self.DEFAULT_ACTIVE_DURATION
         if now < self.time_start:
             return False
-        if self.time_end and now > self.time_end:
+        if now > time_end:
             return False
         return True
 
     def __str__(self):
-        return '%s - %s - %s' % (
+        return '%s - %s - %s (active: %s)' % (
             self.defcon,
             self.title,
-            self.modified_on
+            self.modified_on,
+            self.active
         )
+
+    def save(self, *args, **kwargs):
+        if self.time_end is None:
+            self.time_end = _default_time_end()
+        print (self.time_end)
+        super(Status, self).save(*args, **kwargs)
 
 
 class PluginInstance(models.Model):
