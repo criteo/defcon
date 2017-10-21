@@ -23,7 +23,7 @@ class Status(dict):
         s['title'] = title
         s['link'] = link
         s['defcon'] = int(defcon)
-        s['description'] = description
+        s['description'] = description or ''
         s['time_start'] = time_start
         if time_end is not None and time_end != timezone.make_aware(datetime.min):
             s['time_end'] = time_end

@@ -33,8 +33,9 @@ class Command(base.BaseCommand):
                 updated_statuses |= self.run_plugin(component_obj, plugin_obj)
 
         expired_statuses = (existing_statuses - updated_statuses)
-        print (expired_statuses)
-        models.Status.objects.filter(id__in=expired_statuses).update(time_end=now)
+        if expired_statuses:
+            self.stdout.write(self.style.SUCCESS('Expiring %s' % expired_statuses))
+            models.Status.objects.filter(id__in=expired_statuses).update(time_end=now)
 
     def run_plugin(self, component_obj, plugin_obj):
         """Add a plugin."""

@@ -78,7 +78,6 @@ class AlertmanagerPlugin(base.Plugin):
             return ret
 
         r = requests.get(self.api_url)
-        # TODO: parse stuff an generate status
         data = r.json().get('data', [])
         for root_alert in data:
             blocks = root_alert.get('blocks', []) or []
@@ -112,8 +111,6 @@ class AlertmanagerPlugin(base.Plugin):
     def _to_status(self, root_alert, block, alert):
         """Return a status or None."""
         logging.debug('Handling %s' % (alert))
-        if not self.match_labels(root_alert['labels'], self.labels):
-            return None
         if not self.match_labels(alert['labels'], self.labels):
             return None
         if self.receiver is not None:

@@ -91,7 +91,6 @@ class Status(models.Model):
     def save(self, *args, **kwargs):
         if self.time_end is None:
             self.time_end = _default_time_end()
-        print (self.time_end)
         super(Status, self).save(*args, **kwargs)
 
 
