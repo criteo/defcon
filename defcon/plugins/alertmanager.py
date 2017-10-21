@@ -4,7 +4,11 @@ import logging
 import jinja2
 
 from django.utils import dateparse
+from django.conf import settings
 from defcon.plugins import base
+
+
+DEFAULT_API = getattr(settings, 'ALERTMANAGER_API', None)
 
 
 class AlertmanagerPlugin(base.Plugin):
@@ -43,7 +47,7 @@ class AlertmanagerPlugin(base.Plugin):
         self.labels = config.get('labels', None)
 
         if config:
-            self.api_url = config['api'] + '/alerts/groups'
+            self.api_url = config.get('api', DEFAULT_API) + '/alerts/groups'
             self.defcon = config['defcon']
 
     @property

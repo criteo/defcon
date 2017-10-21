@@ -1,11 +1,18 @@
 """DefCon Prometheus Jira plugin."""
 from __future__ import absolute_import
 
+import os
 import logging
 import jinja2
 import jira
 
 from defcon.plugins import base
+from django.conf import settings
+
+
+DEFAULT_JIRA_URL = getattr(settings, 'JIRA_URL', None)
+DEFAULT_JIRA_USERNAME = getattr(settings, 'JIRA_USERNAME', None)
+DEFAULT_JIRA_PASSWORD = getattr(settings, 'JIRA_PASSWORD', None)
 
 
 class JiraPlugin(base.Plugin):
@@ -47,9 +54,9 @@ class JiraPlugin(base.Plugin):
         self.max_results = config.get('max_results', 5)
 
         if config:
-            self.url = config['url']
-            self.username = config['username']
-            self.password = config['password']
+            self.url = config.get('url', DEFAULT_JIRA_URL)
+            self.username = config.get('username', DEFAULT_JIRA_USERNAME)
+            self.password = config.get('password', DEFAULT_JIRA_PASSWORD)
             self.defcon = config['defcon']
             self.jql = config['jql']
 

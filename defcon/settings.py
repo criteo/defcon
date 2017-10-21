@@ -131,6 +131,12 @@ DEFCON_PLUGINS = [
     'defcon.plugins.static.StaticPlugin',
 ]
 
+# Defaults for plugins
+# JIRA_URL = 'https://jira/'
+# JIRA_USERNAME = foo
+# JIRA_PASSWORD = password
+# ALERTMANAGER_API = 'http://alertmanager:9090/api/v1'
+
 try:
   from defcon.local_settings import *  # noqa
 except ImportError:
