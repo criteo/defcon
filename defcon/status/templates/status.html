@@ -18,7 +18,7 @@
   <main class="defcon-container">
     {% for dc, data in component.statuses_by_plugins %}
     <section class="defcon dc{{ dc }} {% if dc == component.defcon %}active{% endif %} bg-{{ dc|defcon_to_class }}">
-      <h2>{{ dc|defcon_to_class }}</h2>
+      <h2>{{ dc|defcon_to_word }}</h2>
       <a class="defcon more" href="#dc{{ dc }}-details">More</a>
       <ul>
 	      {% for plugin, statuses in data.items %}

@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 {% load defcon %}
-<svg xmlns="http://www.w3.org/2000/svg" width="99" height="20">
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="20">
     <linearGradient id="b" x2="0" y2="100%">
         <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
         <stop offset="1" stop-opacity=".1"/>
     </linearGradient>
     <mask id="a">
-        <rect width="99" height="20" rx="3" fill="#fff"/>
+        <rect width="150" height="20" rx="3" fill="#fff"/>
     </mask>
     <g mask="url(#a)">
-        <path fill="#555" d="M0 0h63v20H0z"/>
-        <path fill="{{ component.defcon | defcon_to_color }}" d="M63 0h36v20H63z"/>
-        <path fill="url(#b)" d="M0 0h99v20H0z"/>
+        <path fill="#555" d="M0 0h94v20H0z"/>
+        <path fill="{{ component.defcon | defcon_to_color }}" d="M94 0h56v20H94z"/>
+        <path fill="url(#b)" d="M0 0h150v20H0z"/>
     </g>
     <g fill="#fff" text-anchor="middle" font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11">
-        <text x="31.5" y="15" fill="#010101" fill-opacity=".3">defcon</text>
-        <text x="31.5" y="14">{{ component.name }}</text>
-        <text x="80" y="15" fill="#010101" fill-opacity=".3"></text>
-        <text x="80" y="14">{{ component.defcon }}</text>
+        <text x="41.5" y="15" fill="#010101" fill-opacity=".1">component</text>
+        <text x="41.5" y="14">{{ component.name }}</text>
+        <text x="120" y="15" fill="#010101" fill-opacity=".1">{{ component.defcon }}</text>
+        <text x="120" y="14">{{ component.defcon|defcon_to_word }}</text>
     </g>
 </svg>
