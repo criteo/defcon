@@ -17,6 +17,7 @@ def defcon_to_class(value):
     }
     return MAP.get(value, 'unknown')
 
+
 @register.filter
 def defcon_to_word(value):
     """Convert a defcon status to a bootstrap message level."""
@@ -28,6 +29,7 @@ def defcon_to_word(value):
         1: 'panic'
     }
     return MAP.get(value, 'unknown')
+
 
 @register.filter
 def defcon_to_color(value):

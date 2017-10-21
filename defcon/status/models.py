@@ -89,6 +89,7 @@ class Status(models.Model):
         )
 
     def save(self, *args, **kwargs):
+        """Save the object."""
         if self.time_end is None:
             self.time_end = _default_time_end()
         super(Status, self).save(*args, **kwargs)

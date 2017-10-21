@@ -1,7 +1,6 @@
 """DefCon Prometheus Jira plugin."""
 from __future__ import absolute_import
 
-import os
 import logging
 import jinja2
 import jira

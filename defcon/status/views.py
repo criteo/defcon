@@ -66,7 +66,7 @@ def index(request):
 def status(request, component_id):
     """Display a specific component."""
     component = shortcuts.get_object_or_404(models.Component, pk=component_id)
-    base_url =  "{0}://{1}".format(request.scheme, request.get_host())
+    base_url = "{0}://{1}".format(request.scheme, request.get_host())
     return {'component': component, 'base_url': base_url}
 
 
