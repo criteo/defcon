@@ -7,7 +7,6 @@ django-picklefield
 djangorestframework
 django-annoying
 django-prometheus
-django-background-tasks
 django-health-check
 jsonfield
 
