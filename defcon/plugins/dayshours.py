@@ -1,4 +1,4 @@
-"""DefCon Static plugin."""
+"""DefCon Dayshours plugin."""
 import datetime
 from defcon.plugins import base
 
