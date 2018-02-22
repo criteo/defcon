@@ -3,7 +3,7 @@ import datetime
 from defcon.plugins import base
 
 
-class DaysHoursPlugin(base.Plugin):
+class DayshoursPlugin(base.Plugin):
     """DefCon Dayshours plugin.
 
     Config:
@@ -19,11 +19,14 @@ class DaysHoursPlugin(base.Plugin):
 
     def __init__(self, config=None):
         """Create an instance of the plugin."""
-        super(DaysHoursPlugin, self).__init__(config)
+        super(DayshoursPlugin, self).__init__(config)
+
+        if config is None:
+            config = {}
 
         if config:
-          self.days = config['days']
-          self.hours = config['hours']
+          self.days = config.get('days', [0,1,2,3])
+          self.hours = config.get('hours', [9,15])
           self.defcon = config['defcon']
 
     @property
@@ -49,6 +52,9 @@ class DaysHoursPlugin(base.Plugin):
     def statuses(self):
         """Return the generated statuses."""
         ret = {}
+
+        if self._config is None:
+            return ret
 
         now = datetime.datetime.now()
         day = now.weekday()
