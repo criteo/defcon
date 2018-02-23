@@ -2,9 +2,22 @@
 
 {% load bootstrap3 %}
 {% load staticfiles %}
+{% load account %}
+{% load socialaccount %}
+{% load fontawesome %}
+{% load gravatar %}
 
 {% block bootstrap3_extra_head %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+{% block extra_head %}
+<header>
+   {% fontawesome_stylesheet %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</header>
+{% endblock %}
+{{ super }}
+
+{{ form.media }}
 {% endblock %}
 
 
@@ -27,14 +40,40 @@
       <ul class="nav navbar-nav">
       </ul>
       <ul class="nav navbar-nav navbar-right">
-	<li><a href="/api/">API</a></li>
+	    <li><a href="/api/">{% fontawesome_icon 'sitemap' %} API</a></li>
+        <li><a href="/admin/">{% fontawesome_icon 'cogs' %} Admin</a></li>
+          {% if user.is_authenticated %}
+          {% get_social_accounts user as accounts %}
+          <li><a href="{% url 'account_logout' %}">{% fontawesome_icon 'sign-out' %} Sign Out</a></li>
+          <li>
+              <a href="{% if user.socialaccount_set.all.0.get_profile_url %}{{ user.socialaccount_set.all.0.get_profile_url }}{% else %}#{% endif %}">
+              {% if user.socialaccount_set.all.0.get_avatar_url %}
+              <img class="img-circle img-responsive center-block" width="32" heigh="32" src="{{ user.socialaccount_set.all.0.get_avatar_url }}" alt="{{ user.get_full_name }}" />
+              {% elif user.email %}
+              {% gravatar user.email 32 user.get_full_name "img-circle img-responsive center-block" %}
+              {% else %}
+              {% user_display user %}
+              {% endif %}
+              </a>
+          </li>
+          {% else %}
+          <li><a href="{% url 'account_login' %}">{% fontawesome_icon 'sign-in' %} Sign In</a></li>
+          {% endif %}
       </ul>
     </div>
   </div>
 </nav>
 {% endblock %}
 
-{% block content %}
+<div id="main" class="container{% if 'accounts' not in request.path %}-fluid{% endif %}">
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+</div>
+
+{% block extra_body %}
 {% endblock %}
+
 
 {% endblock %}

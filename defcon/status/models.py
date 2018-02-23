@@ -21,8 +21,8 @@ class Plugin(models.Model):
     id = models.CharField(
         primary_key=True, max_length=64, validators=[_ID_VALIDATOR])
     name = models.CharField(max_length=64)
-    description = models.TextField(max_length=254, blank=True, null=True)
-    link = models.URLField(max_length=254, blank=True)
+    description = models.TextField(max_length=1024, blank=True, null=True)
+    link = models.URLField(max_length=1024, blank=True)
     py_module = models.CharField(max_length=255)
 
     def __str__(self):
@@ -51,11 +51,11 @@ class Status(models.Model):
         default=5
     )
     title = models.CharField(max_length=60)
-    description = models.TextField(max_length=254, blank=True, null=True)
+    description = models.TextField(max_length=1024, blank=True, null=True)
     # To store metadata that will be exposed in the API.
     metadata = jsonfield.JSONField(null=True)
     # Link to the event / documentation.
-    link = models.URLField(max_length=254)
+    link = models.URLField(max_length=1024)
     # Will be used to know if the event is still active or not, useful
     # for scheduled events.
     time_start = models.DateTimeField(auto_now=True)
@@ -99,8 +99,8 @@ class PluginInstance(models.Model):
     """Instance of a plugin (including settings)."""
 
     name = models.CharField(max_length=64)
-    description = models.TextField(max_length=254, blank=True, null=True)
-    plugin = models.ForeignKey(Plugin)
+    description = models.TextField(max_length=1024, blank=True, null=True)
+    plugin = models.ForeignKey(Plugin, on_delete=models.CASCADE)
     statuses = models.ManyToManyField(Status, blank=True)
     config = picklefield.PickledObjectField(null=True)
     created_on = models.DateTimeField(auto_now_add=True)
@@ -128,8 +128,8 @@ class Component(models.Model):
     id = models.CharField(
         primary_key=True, max_length=64, validators=[_ID_VALIDATOR])
     name = models.CharField(max_length=64)
-    description = models.TextField(max_length=254, blank=True, null=True)
-    link = models.URLField(max_length=254)
+    description = models.TextField(max_length=1024, blank=True, null=True)
+    link = models.URLField(max_length=1024)
     contact = models.EmailField(max_length=254)
     plugins = models.ManyToManyField(PluginInstance, blank=True)
 
