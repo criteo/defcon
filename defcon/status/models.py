@@ -181,6 +181,8 @@ class Component(models.Model):
         defcon = 5
         override = False
         for status in self.all_statuses():
+            if not status.active:
+                continue
             if status.override:
                 # If it's the first override, reset defcon.
                 if override is False:
