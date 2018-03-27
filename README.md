@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/iksaif/defcon/badge.svg)](https://coveralls.io/github/iksaif/defcon?branch=master)
 [![Dependency Status](https://gemnasium.com/badges/github.com/iksaif/defcon.svg)](https://gemnasium.com/github.com/iksaif/defcon)
 
-UI and API to show an aggregate status of your services.
+UI and API to show an aggregate status of your services. The idea of defcon is that it gathers the status of various components of your infrastructure and exposes them to both humans and machines. Humans (:couple:) will go to the UI to see if something is known to be wrong, and machines (:computer:) will consume the API. This could be used to automatically pause Jenkins job or Chef runs when the production looks unstable.
 
 [![DefCon screenshot](doc/defcon.png)](doc/defcon.png)
 
