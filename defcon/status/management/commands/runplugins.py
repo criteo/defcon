@@ -64,8 +64,9 @@ class Command(base.BaseCommand):
             status_obj, created = models.Status.objects.update_or_create(
                 id=status_id, defaults=status)
 
-            if created:
-                plugin_obj.statuses.add(status_obj)
+            # Because statuses can be shared between plugins, we always add them
+            # to the plugin, not only when they are created.
+            plugin_obj.statuses.add(status_obj)
         except Exception:
             msg = "Failed to save status with id #%s" % status_id
             logging.exception(msg)
