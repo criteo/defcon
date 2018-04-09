@@ -15,7 +15,7 @@ DEFAULT_JIRA_PASSWORD = getattr(settings, 'JIRA_PASSWORD', None)
 
 
 class JiraPlugin(base.Plugin):
-    """DefCon Static plugin.
+    """DefCon JIRA plugin.
 
     Config:
     ```python
@@ -25,8 +25,8 @@ class JiraPlugin(base.Plugin):
       'password': 'bar',
       'jql': {},            // Get tickets matching this jql.
       'max_results': 5,
-      'title_template': '{{ labels.alertname }}',
-      'description_template': '{{ annotations }}',
+      'title_template': '{{ key }} - {{ fields.summary }}',
+      'description_template': {{ fields.description }}',
       'link_template': '{{ me }}',
       'defcon': callback or int, // raw int or callback returning defcon
     }
@@ -72,7 +72,7 @@ class JiraPlugin(base.Plugin):
     @property
     def description(self):
         """Return the description."""
-        return 'Returns statuses based on alerts on jira.'
+        return 'Returns statuses based on issues on jira.'
 
     @property
     def link(self):
