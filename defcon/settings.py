@@ -176,6 +176,10 @@ DEFCON_PLUGINS = [
 # JIRA_PASSWORD = password
 # ALERTMANAGER_API = 'http://alertmanager:9090/api/v1'
 
+# Enable only in local_settings and make sure this
+# is disabled when running migration related commands.
+DEFCON_METRICS = False
+
 try:
   from defcon.local_settings import *  # noqa
 except ImportError:

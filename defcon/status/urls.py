@@ -5,6 +5,10 @@ from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
 
 from defcon.status import views
+# pylama:ignore=W0611
+from defcon.status import metrics
+# pylama:select=W0611
+
 
 router = routers.DefaultRouter()
 router.register(r'defcon', views.DefConViewSet, 'defcon')

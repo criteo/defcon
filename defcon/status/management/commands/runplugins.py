@@ -52,10 +52,17 @@ class Command(base.BaseCommand):
                 (component_obj.name, plugin_obj.plugin.name))
             logging.exception(msg)
             self.stderr.write(self.style.ERROR(msg))
+            plugin_obj.failure += 1
+            plugin_obj.failure_on = timezone.now()
+            plugin_obj.save()
             return set()
 
         for status_id, status in statuses:
             self._save_status(plugin_obj, status_id, status)
+
+        plugin_obj.success += 1
+        plugin_obj.success_on = timezone.now()
+        plugin_obj.save()
         return set([status_id for status_id, _ in statuses])
 
     def _save_status(self, plugin_obj, status_id, status):

@@ -106,6 +106,11 @@ class PluginInstance(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     modified_on = models.DateTimeField(auto_now=True)
 
+    success = models.PositiveIntegerField(default=0)
+    failure = models.PositiveIntegerField(default=0)
+    success_on = models.DateTimeField(null=True, blank=True)
+    failure_on = models.DateTimeField(null=True, blank=True)
+
     @property
     def component(self):
         """Return the component associated with this instance."""
