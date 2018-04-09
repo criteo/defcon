@@ -7,18 +7,26 @@ from django import test
 from defcon.plugins import alertmanager
 
 
-@httmock.urlmatch(netloc=r'(.*\.)?alertmanager\.io$')
+@httmock.urlmatch()
 def _alertmanager_mock(url, request):
+    if url.netloc == 'foo.alertmanager0.14.io':
+        suffix = '_0.14'
+    else:
+        suffix = ''
     filename = os.path.join(
         os.path.dirname(__file__),
-        'spec_alertmanager.json')
+        'spec_alertmanager%s.json' % suffix
+    )
     return open(filename).read()
 
 
 class AlertmanagerPluginTests(test.TestCase):
     """Test the plugins."""
 
-    _API_URL = 'http://foo.alertmanager.io/api/v1/'
+    _API_URLS = [
+        'http://foo.alertmanager.io/api/v1/',
+        'http://foo.alertmanager0.14.io/api/v1/',
+    ]
 
     def test_base(self):
         """Basic test."""
@@ -27,19 +35,20 @@ class AlertmanagerPluginTests(test.TestCase):
 
     def test_all(self):
         """Test with some settings."""
-        with httmock.HTTMock(_alertmanager_mock):
-            p = alertmanager.AlertmanagerPlugin(
-                {
-                    'api': self._API_URL,
-                    'defcon': lambda _: 3,
-                    'receiver': 'default',
-                }
-            )
-            statuses = sorted(p.statuses().values())
-            status = statuses[0]
+        for api_url in self._API_URLS:
+            with httmock.HTTMock(_alertmanager_mock):
+                p = alertmanager.AlertmanagerPlugin(
+                    {
+                        'api': api_url,
+                        'defcon': lambda _: 3,
+                        'receiver': 'default',
+                    }
+                )
+                statuses = sorted(p.statuses().values())
+                status = statuses[0]
 
-            self.assertEqual(status['title'], 'ExampleAlertAlwaysFiring')
-            self.assertEqual(status['defcon'], 3)
+                self.assertEqual(status['title'], 'ExampleAlertAlwaysFiring')
+                self.assertEqual(status['defcon'], 3)
 
     def test_match_labels(self):
         """Check that we match labels properly."""

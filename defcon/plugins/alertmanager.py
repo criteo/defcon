@@ -78,6 +78,7 @@ class AlertmanagerPlugin(base.Plugin):
             return ret
 
         r = requests.get(self.api_url)
+        r.raise_for_status()
         data = r.json().get('data', [])
         for root_alert in data:
             blocks = root_alert.get('blocks', []) or []
@@ -113,11 +114,18 @@ class AlertmanagerPlugin(base.Plugin):
         logging.debug('Handling %s' % (alert))
         if not self.match_labels(alert['labels'], self.labels):
             return None
+        status = alert.get('status', {})
         if self.receiver is not None:
-            if block['routeOpts']['receiver'] != self.receiver:
-                return None
+            if 'routeOpts' in block:
+                if block['routeOpts']['receiver'] != self.receiver:
+                    return None
+        # Old API
         if alert.get('inhibited') or alert.get('silenced'):
-            logging.debug('alert is inactived')
+            logging.debug('alert is inactive')
+            return None
+        # New API
+        if status.get('state', 'active') != 'active':
+            logging.debug('alert is inactived: %s' % status)
             return None
 
         # Guess the level.
