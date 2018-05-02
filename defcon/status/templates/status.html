@@ -8,47 +8,50 @@
 
 {% block content %}
 <div id="main">
-  <header>
-    <h1>Defcon</h1>
-    <span>
+    <header>
+        <h1>Defcon</h1>
+        <span>
       Current state of <strong id="perimeter">{{ component.name }}</strong> is:
     </span>
-  </header>
-  <main class="defcon-container">
-    {% for dc, data in component.statuses_by_plugins %}
-    <section class="defcon dc{{ dc }} {% if dc == component.defcon %}active{% endif %} bg-{{ dc|defcon_to_class }}">
-      <h2>{{ dc|defcon_to_word }}</h2>
-      <a class="defcon more" href="#dc{{ dc }}-details">More</a>
-      <ul>
-	{% for plugin, statuses in data.items %}
-	<hr/>
-	<h3>{{ plugin.plugin.name }} ({{ statuses|length }})</h3>
-	<ul>
-	  {% for status in statuses %}
-	  <li>
-	    {{ status.title }} - {% if status.link %}<a href="{{ status.link }}">#</a>{% endif %}
-	    <p>
-	      {{ status.description|truncatewords:5 }}
-	    </p>
-	  </li>
-	  {% endfor %}
-	</ul>
-	{% endfor %}
-      </ul>
-    </section>
-    {% endfor %}
-  </main>
-  <div class="panel panel-default">
-    <div class="panel-body">
-      <p>
-	Badge: <img src="/badge/{{component.id}}.svg" />
-	<code>{{ base_url }}/badge/{{component.id}}.svg</code>
-      </p>
-      <p>
-	API:
-	<code>{{ base_url }}/api/simple/{{component.id}}/</code>
-      </p>
+    </header>
+    <main class="defcon-container">
+        {% for dc, data in component.statuses_by_plugins %}
+        <section class="defcon dc{{ dc }} {% if dc == component.defcon %}active{% endif %} bg-{{ dc|defcon_to_class }}">
+            <h2>{{ dc|defcon_to_word }}</h2>
+            <a class="defcon more" href="#dc{{ dc }}-details" data-toggle="collapse" aria-expanded="{% if dc == component.defcon %}true{% else %}false{% endif %}"
+               aria-controls="dc{{ dc }}-details">More</a>
+            <div id="dc{{ dc }}-details" class="defcon-details collapse {% if dc == component.defcon %}in{% endif %}">
+                <ul>
+                    {% for plugin, statuses in data.items %}
+                    <hr/>
+                    <h3>{{ plugin.plugin.name }} ({{ statuses|length }})</h3>
+                    <ul>
+                        {% for status in statuses %}
+                        <li>
+                            {{ status.title }} - {% if status.link %}<a href="{{ status.link }}">#</a>{% endif %}
+                            <p>
+                                {{ status.description|truncatewords:5 }}
+                            </p>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+        {% endfor %}
+    </main>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <p>
+                Badge: <img src="/badge/{{component.id}}.svg"/>
+                <code>{{ base_url }}/badge/{{component.id}}.svg</code>
+            </p>
+            <p>
+                API:
+                <code>{{ base_url }}/api/simple/{{component.id}}/</code>
+            </p>
+        </div>
     </div>
-  </div>
 </div>
 {% endblock %}
