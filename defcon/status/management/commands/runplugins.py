@@ -1,5 +1,6 @@
 """Component commands."""
 import logging
+import uuid
 
 from django.utils import module_loading
 from django.utils import timezone
@@ -22,7 +23,7 @@ class Command(base.BaseCommand):
         # TODO: add filters by components and plugins.
 
         # Get the status that haven't expired yet to make them expire if
-        # they disapeared.
+        # they disappeared.
         now = timezone.now()
         existing_statuses = set(models.Status.objects.filter(
             time_end__gte=now).values_list('id', flat=True))
@@ -57,6 +58,9 @@ class Command(base.BaseCommand):
             plugin_obj.save()
             return set()
 
+        # Create an identifier unique to this plugin obj.
+        statuses = [(uuid.uuid5(status_id, str(plugin_obj.id)), status) for status_id, status in statuses]
+
         for status_id, status in statuses:
             self._save_status(plugin_obj, status_id, status)
 
@@ -68,6 +72,7 @@ class Command(base.BaseCommand):
     def _save_status(self, plugin_obj, status_id, status):
         """Save a status."""
         try:
+            del status['id']
             status_obj, created = models.Status.objects.update_or_create(
                 id=status_id, defaults=status)
 
