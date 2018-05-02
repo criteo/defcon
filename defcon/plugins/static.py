@@ -58,6 +58,7 @@ class StaticPlugin(base.Plugin):
         statuses = self._config.get('statuses', {})
 
         if not isinstance(statuses, dict):
-            statuses = {status['id']: status for status in statuses}
+            statuses = {status['id']: dict(status) for status in statuses}
 
-        return statuses
+        # Always return a copy to avoid mutations from the caller.
+        return dict(statuses)

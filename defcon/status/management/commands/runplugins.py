@@ -59,7 +59,10 @@ class Command(base.BaseCommand):
             return set()
 
         # Create an identifier unique to this plugin obj.
-        statuses = [(uuid.uuid5(status_id, str(plugin_obj.id)), status) for status_id, status in statuses]
+        statuses = [
+            (uuid.uuid5(status_id, str(plugin_obj.id)), status)
+            for status_id, status in statuses
+        ]
 
         for status_id, status in statuses:
             self._save_status(plugin_obj, status_id, status)

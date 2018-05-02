@@ -265,7 +265,7 @@ class TestRunPluginsCommand(test.TestCase):
             'plugin': 'fake',
             'name': 'test',
             'description': 'test plugin instance',
-            'config': {'statuses': statuses},
+            'config': {'statuses': list(statuses)},
         }
         components['production']['plugins'].append(plugin)
 
@@ -285,7 +285,7 @@ class TestRunPluginsCommand(test.TestCase):
             self.assertIn("Running test Production:Fake plugin", out.getvalue())
             self.assertIn("Created Fake plugin:Test status", out.getvalue())
 
-            status_model = models.Status.objects.get(id=status['id'])
+            status_model = models.Status.objects.all()[0]
 
             self.assertEqual(status_model.title, status['title'])
             self.assertEqual(status_model.link, status['link'])
@@ -302,9 +302,10 @@ class TestRunPluginsCommand(test.TestCase):
             management.call_command('runplugins', stdout=out)
 
             status.description = 'status description'
+
             management.call_command('runplugins', stdout=out)
             self.assertIn("Running test Production:Fake plugin", out.getvalue())
             self.assertIn("Updated Fake plugin:Test status", out.getvalue())
 
-            status_model = models.Status.objects.get(id=status['id'])
+            status_model = models.Status.objects.all()[0]
             self.assertEqual(status_model.description, status['description'])
