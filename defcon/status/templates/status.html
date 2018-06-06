@@ -43,6 +43,19 @@
     </main>
     <div class="panel panel-default">
         <div class="panel-body">
+	          {% if component.description %}
+	          <p>
+	            {{ component.description|safe }}
+	          </p>
+	          {% endif %}
+	          <p>
+	            {% if component.link %}
+	            <br />
+	            Link: <a href="{{ component.link }}">{{ component.link }}</a>
+                <br/>
+                Contact: {{ component.contact }}
+	            {% endif %}
+	          </p>
             <p>
                 Badge: <img src="/badge/{{component.id}}.svg"/>
                 <code>{{ base_url }}/badge/{{component.id}}.svg</code>
