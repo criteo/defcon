@@ -27,5 +27,4 @@ class AlertmanagerPluginTests(test.TestCase):
             statuses = sorted(p.statuses().values())
             status = statuses[0]
 
-            self.assertEqual(status['title'], '')
             self.assertEqual(status['defcon'], 5)

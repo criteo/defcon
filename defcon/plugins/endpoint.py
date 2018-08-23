@@ -8,19 +8,24 @@ from defcon.plugins import base
 class EndpointPlugin(base.Plugin):
     """DefCon Endpoint plugin.
 
-    set an endpoint to get a defcon level.
+    Set an endpoint to get a defcon level.
     The endpoint should have the info {...'defcon':[1-5],...}
-    Another endPoint can be setup to force the level
 
     Config:
     ```python
     {
-        'title': 'Defcon Production',
         'url': 'http://defcon.com/api/simple/production/', // Url to endpoint
-        'link_status': 'http://defcon.com/status/production/ // Url to endpoint info
-        'force_url': 'http://defcon.com/api/simple/force/, // Url to force endpoint
     }
     ```
+    response from the url should be like the DefCon simple API:
+    {
+        "name": "Production",
+        "contact": "production@prod.com",
+        "link": "https://confluence/production+Home",
+        "defcon": 3,
+        "description": "fooo"
+    }
+
     """
 
     def __init__(self, config=None):
@@ -30,9 +35,6 @@ class EndpointPlugin(base.Plugin):
             config = {}
 
         self.url = config.get('url')
-        self.force_url = config.get('force_url', 'http://defcon.com/status')
-        self.title = config.get('title', '')
-        self.link_status = config.get('link_status', '')
 
     @property
     def short_name(self):
@@ -66,27 +68,15 @@ class EndpointPlugin(base.Plugin):
         if self._config is None:
             return ret
 
-        defcon = 0
+        try:
+            defcon = self._get_defcon_from_url(self.url)
+        except requests.exceptions.RequestException as e:
+            print(e)
+            defcon = 5
+        status = self._to_status(defcon, self.url)
+        if status is not None:
+            ret[status['id']] = status
 
-        if self.force_url is not None:
-            try:
-                defcon = self._get_defcon_from_url(self.force_url)
-            except requests.exceptions.RequestException as e:
-                print(e)
-                defcon = 0
-        if int(defcon) == 0:
-            try:
-                defcon = self._get_defcon_from_url(self.url)
-            except requests.exceptions.RequestException as e:
-                print(e)
-                defcon = 5
-            status = self._to_status(defcon, self.url)
-            if status is not None:
-                ret[status['id']] = status
-        else:
-            status = self._to_status(defcon, self.force_url)
-            if status is not None:
-                ret[status['id']] = status
         return ret
 
     def _to_status(self, defcon, url):
@@ -94,8 +84,8 @@ class EndpointPlugin(base.Plugin):
         logging.debug('Handling %s' % (url))
 
         status = base.Status(
-            title=self.title,
-            link=self.link_status,
+            title=self.name,
+            link=self.link,
             defcon=defcon,
             description=self.description,
         )
