@@ -33,7 +33,7 @@ class EndpointPlugin(base.Plugin):
         super(EndpointPlugin, self).__init__(config)
         if config is None:
             config = {}
-
+            
         self.url = config.get('url')
 
     @property
@@ -56,10 +56,10 @@ class EndpointPlugin(base.Plugin):
         """Return the link."""
         return 'https://github.com/iksaif/defcon'
 
-    def _get_defcon_from_url(self, url):
+    def _get_api_from_url(self, url):
         r = requests.get(self.url)
         r.raise_for_status()
-        return (r.json().get('defcon', []))
+        return (r.json())
 
     def statuses(self):
         """Return the generated statuses."""
@@ -69,24 +69,32 @@ class EndpointPlugin(base.Plugin):
             return ret
 
         try:
-            defcon = self._get_defcon_from_url(self.url)
+            reqEndPoint = self._get_api_from_url(self.url)
+
         except requests.exceptions.RequestException as e:
             print(e)
-            defcon = 5
-        status = self._to_status(defcon, self.url)
+            reqEndPoint = {
+                "name": "Production",
+                "contact": "production@prod.com",
+                "link": "https://confluence/production+Home",
+                "defcon": 5,
+                "description": "fooo"
+            }
+
+        status = self._to_status(reqEndPoint, self.url)
+
         if status is not None:
             ret[status['id']] = status
-
         return ret
 
-    def _to_status(self, defcon, url):
+    def _to_status(self, reqEndPoint, url):
         """Return a status or None."""
         logging.debug('Handling %s' % (url))
 
         status = base.Status(
-            title=self.name,
-            link=self.link,
-            defcon=defcon,
-            description=self.description,
+            title=reqEndPoint.get('name'),
+            link=reqEndPoint.get('link'),
+            defcon=reqEndPoint.get('defcon'),
+            description=reqEndPoint.get('description'),
         )
         return status
