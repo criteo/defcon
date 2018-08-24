@@ -33,7 +33,7 @@ class EndpointPlugin(base.Plugin):
         super(EndpointPlugin, self).__init__(config)
         if config is None:
             config = {}
-            
+
         self.url = config.get('url')
 
     @property
