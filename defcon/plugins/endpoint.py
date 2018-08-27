@@ -56,7 +56,7 @@ class EndpointPlugin(base.Plugin):
         """Return the link."""
         return 'https://github.com/iksaif/defcon'
 
-    def _get_api_from_url(self, url):
+    def _get_defcon_from_url(self, url):
         r = requests.get(self.url)
         r.raise_for_status()
         return (r.json())
@@ -69,32 +69,34 @@ class EndpointPlugin(base.Plugin):
             return ret
 
         try:
-            reqEndPoint = self._get_api_from_url(self.url)
+            payload = self._get_defcon_from_url(self.url)
 
         except requests.exceptions.RequestException as e:
-            print(e)
-            reqEndPoint = {
-                "name": "Production",
-                "contact": "production@prod.com",
-                "link": "https://confluence/production+Home",
+            # catch requests exceptions and create a flase payload
+            logging.exception(e)
+            payload = {
+                "name": "Failed to get info from {}".format(self.url),
+                "contact": "Failed to get info from {}".format(self.url),
+                "link": "Failed to get info from {}".format(self.url),
                 "defcon": 5,
-                "description": "fooo"
+                "description": "Failed to get info from {}".format(self.url)
             }
 
-        status = self._to_status(reqEndPoint, self.url)
+        status = self._to_status(payload, self.url)
 
         if status is not None:
             ret[status['id']] = status
         return ret
 
-    def _to_status(self, reqEndPoint, url):
+    def _to_status(self, payload, url):
         """Return a status or None."""
         logging.debug('Handling %s' % (url))
-
+        # if endpoint doesn't have all the infos
+        # default message will be send
         status = base.Status(
-            title=reqEndPoint.get('name'),
-            link=reqEndPoint.get('link'),
-            defcon=reqEndPoint.get('defcon'),
-            description=reqEndPoint.get('description'),
+            title=payload.get('name', "name not found from {}".format(url)),
+            link=payload.get('link', "link not from {}".format(url)),
+            defcon=payload.get('defcon', 5),
+            description=payload.get('description', "description not found from {}".format(url)),
         )
         return status
