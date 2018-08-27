@@ -1,4 +1,4 @@
-"""DefCon Prometheus Alertmanager plugin."""
+"""DefCon Endpoint plugin."""
 import requests
 import logging
 
@@ -72,7 +72,7 @@ class EndpointPlugin(base.Plugin):
             payload = self._get_defcon_from_url(self.url)
 
         except requests.exceptions.RequestException as e:
-            # catch requests exceptions and create a flase payload
+            # catch requests exceptions and create a false payload
             logging.exception(e)
             payload = {
                 "name": "Failed to get info from {}".format(self.url),
