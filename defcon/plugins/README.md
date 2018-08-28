@@ -58,8 +58,6 @@ Module: `defcon.plugins.alertmanager.AlertmanagerPlugin`
 
 To be used to set defcon based on alerts.
 
-## Static
-
 ```python
 {
   'api': 'http://alertmanager:9090/api/v1', // Url to root API.
@@ -69,6 +67,31 @@ To be used to set defcon based on alerts.
   'description_template': '{{ annotations }}',
   'link_template': '{{ generatorURL }}',
   'defcon': 'label' or int, // Label to use as defcon or raw int.
+}
+```
+
+# Endpoint
+
+Module: `defcon.plugins.endpoint.EndpointPlugin`
+
+To be used to set defcon based on Endpoint.
+
+
+```python
+{
+  'url': 'http://endpoint/api/v1', // Url to API.
+}
+```
+
+response of the API have to be like the simple defcon API:
+
+```json
+{
+  "name": "Production",
+  "contact": "production@prod.com",
+  "link": "https://confluence/production+Home",
+  "defcon": 3,
+  "description": "fooo"
 }
 ```
 
