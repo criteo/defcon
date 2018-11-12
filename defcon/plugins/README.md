@@ -6,7 +6,7 @@ This is a list of plugins shipped with defcon.
 
 Module: `defcon.plugins.static.StaticPlugin`
 
-This is a very simple plugin to add static statuses in the database, useuful
+This is a very simple plugin to add static statuses in the database, useful
 for scheduled events.
 
 ### Settings
@@ -52,7 +52,7 @@ Module: `defcon.plugins.jira.JiraPlugin`
 }
 ```
 
-## Prometeus Alertmanager
+## Prometheus Alertmanager
 
 Module: `defcon.plugins.alertmanager.AlertmanagerPlugin`
 
