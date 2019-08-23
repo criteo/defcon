@@ -17,7 +17,7 @@ class AlertmanagerPlugin(base.Plugin):
     Config:
     ```python
     {
-      'api': 'http://alertmanager:9090/api/v1', // Url to root API.
+      'api': 'http://alertmanager:9090/api/v2', // Url to root API.
       'receiver': 'default', // Get alerts rooted to this receiver.
       'labels': {}, // Get alerts matching these labels.
       'title_template': '{{ labels.alertname }}',
@@ -26,6 +26,35 @@ class AlertmanagerPlugin(base.Plugin):
       'defcon': 'label' or int, // Label to use as defcon or raw int.
     }
     ```
+    Alert ex:
+    # {
+    #     "alerts": [
+    #     {
+    #         "annotations": {
+    #         "description": "Local instance is not responding for more than 20 minutes.",
+    #         "documentation": "https://example.com",
+    #         "summary": "down in dc2"
+    #         },
+    #         "endsAt": "2019-08-23T12:47:48.736Z",
+    #         "fingerprint": "65QSDFJHKsdjqnsdqsjkhd9",
+    #         "receivers": [{ "name": "default" }, { "name": "logs" }],
+    #         "startsAt": "2019-08-23T12:44:48.736Z",
+    #         "status": { "inhibitedBy": [], "silencedBy": [], "state": "active" },
+    #         "updatedAt": "2019-08-23T12:44:48.813Z",
+    #         "generatorURL": "http://prometheus-example",
+    #         "labels": {
+    #         "alertname": "LocalDown",
+    #         "dc": "sdc2",
+    #         "env": "prod",
+    #         "level": "local",
+    #         "perimeter": "mail",
+    #         "severity": "page"
+    #         }
+    #     }
+    #     ],
+    #     "labels": {},
+    #     "receiver": { "name": "teamName-slack" }
+    # }
     """
 
     def __init__(self, config=None):
@@ -47,7 +76,7 @@ class AlertmanagerPlugin(base.Plugin):
         self.labels = config.get('labels', None)
 
         if config:
-            self.api_url = config.get('api', DEFAULT_API) + '/alerts/groups'
+            self.api_url = config.get('api', DEFAULT_API) + '/api/v2/alerts/groups'
             self.defcon = config['defcon']
 
     @property
@@ -79,16 +108,13 @@ class AlertmanagerPlugin(base.Plugin):
 
         r = requests.get(self.api_url)
         r.raise_for_status()
-        data = r.json().get('data', [])
-        for root_alert in data:
-            blocks = root_alert.get('blocks', []) or []
-            for block in blocks:
-                alerts = block.get('alerts', []) or []
-                for alert in alerts:
-                    status = self._to_status(root_alert, block, alert)
-                    if status is not None:
-                        ret[status['id']] = status
-
+        dataFull = r.json()
+        for data in dataFull:
+            alerts = data.get('alerts', []) or []
+            for alert in alerts:
+                status = self._to_status(alert)
+                if status is not None:
+                    ret[status['id']] = status
         return ret
 
     @staticmethod
@@ -109,16 +135,23 @@ class AlertmanagerPlugin(base.Plugin):
         env = jinja2.Environment()
         return env.from_string(template).render(**data)
 
-    def _to_status(self, root_alert, block, alert):
+    def _to_status(self, alert):
         """Return a status or None."""
         logging.debug('Handling %s' % (alert))
         if not self.match_labels(alert['labels'], self.labels):
             return None
         status = alert.get('status', {})
+
+        # Check Receiver
         if self.receiver is not None:
-            if 'routeOpts' in block:
-                if block['routeOpts']['receiver'] != self.receiver:
+            if alert.get('receivers') is not None:
+                receiverList = []
+                for receveir in alert.get("receivers"):
+                    if receveir["name"] is not None:
+                        receiverList.append(receveir["name"])
+                if self.receiver not in receiverList:
                     return None
+
         # Old API
         if alert.get('inhibited') or alert.get('silenced'):
             logging.debug('alert is inactive')

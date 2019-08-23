@@ -28,14 +28,14 @@ Vary: Accept
             "url": "http://defcon/api/plugin_instance/4/",
             "statuses": [],
             "name": "alertmanager-page",
-            "config": "{'receiver': 'observability-page', 'defcon': 2, 'api': 'https://alertmanager/api/v1/'}",
+            "config": "{'receiver': 'observability-page', 'defcon': 2, 'api': 'https://alertmanager/'}",
             "plugin": "http://defcon/api/plugin/alertmanager/"
         },
         {
             "url": "http://defcon/api/plugin_instance/5/",
             "name": "alertmanager-ticket",
             "description": "",
-            "config": "{'receiver': 'observability-ticket', 'defcon': 4, 'api': 'https://alertmanager/api/v1/'}",
+            "config": "{'receiver': 'observability-ticket', 'defcon': 4, 'api': 'https://alertmanager/'}",
             "plugin": "http://defcon/api/plugin/alertmanager/"
         }
     ],
