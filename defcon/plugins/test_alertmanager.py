@@ -24,8 +24,7 @@ class AlertmanagerPluginTests(test.TestCase):
     """Test the plugins."""
 
     _API_URLS = [
-        'http://foo.alertmanager.io/api/v1/',
-        'http://foo.alertmanager0.14.io/api/v1/',
+        'http://foo.alertmanager.io/',
     ]
 
     def test_base(self):
@@ -49,6 +48,10 @@ class AlertmanagerPluginTests(test.TestCase):
 
                 self.assertEqual(status['title'], 'ExampleAlertAlwaysFiring')
                 self.assertEqual(status['defcon'], 3)
+
+                # statuses[1] have wrong receiver, so it should raise an exeption
+                with self.assertRaises(IndexError):
+                    statuses[1]
 
     def test_match_labels(self):
         """Check that we match labels properly."""

@@ -60,7 +60,7 @@ To be used to set defcon based on alerts.
 
 ```python
 {
-  'api': 'http://alertmanager:9090/api/v1', // Url to root API.
+  'api': 'http://alertmanager:9090/api/v2', // Url to root API.
   'receiver': 'default', // Get alerts rooted to this receiver.
   'labels': {}, // Get alerts matching these labels.
   'title_template': '{{ labels.alertname }}',
