@@ -36,7 +36,7 @@ _TEST_REQUIRE = [l for l in _TESTS_REQUIREMENTS_TXT if "://" not in l]
 
 setup(
     name='defcon-monitoring',
-    version='0.2.0',
+    version='0.3.0',
     packages=find_packages(),
     include_package_data=True,
     license='GPLv3',
@@ -45,9 +45,9 @@ setup(
     tests_require=_TEST_REQUIRE,
     description='defcon.',
     long_description=README,
-    url='http://github.com/iksaif/defcon',
+    url='http://github.com/criteo/defcon',
     author='Corentin Chary',
-    author_email='corentin.chary@gmail.com',
+    author_email='sre-observability@criteo.com',
     classifiers=[
         'Environment :: Web Environment',
         'Framework :: Django',
