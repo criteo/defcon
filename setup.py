@@ -45,6 +45,7 @@ setup(
     tests_require=_TEST_REQUIRE,
     description='defcon.',
     long_description=README,
+    long_description_content_type="text/markdown",
     url='http://github.com/criteo/defcon',
     author='Corentin Chary',
     author_email='sre-observability@criteo.com',
