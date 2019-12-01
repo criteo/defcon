@@ -54,7 +54,7 @@ class EndpointPlugin(base.Plugin):
     @property
     def link(self):
         """Return the link."""
-        return 'https://github.com/iksaif/defcon'
+        return 'https://github.com/criteo/defcon'
 
     def _get_defcon_from_url(self, url):
         r = requests.get(self.url)

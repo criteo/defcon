@@ -21,7 +21,7 @@ Simply add a dict of statuses. Each must have its own unique uuid.
       'title': 'Test status',
       'description': 'This is a test status.',
       'metadata': '{"foo": "bar"}',
-      'link': 'http://github.com/iksaif/defcon',
+      'link': 'http://github.com/criteo/defcon',
       'time_start': '2017-04-18T08:24:21.920695Z',
       'time_end': None,
       'override': False,

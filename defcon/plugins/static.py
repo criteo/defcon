@@ -17,7 +17,7 @@ class StaticPlugin(base.Plugin):
            'title': 'Test status',
            'description': 'This is a test status.',
            'metadata': '{"foo": "bar"}',
-           'link': 'http://githun.com/iksaif/defcon',
+           'link': 'http://githun.com/criteo/defcon',
            'time_start': '2017-04-18T08:24:21.920695Z',
            'time_end': None,
            'override': False,
@@ -51,7 +51,7 @@ class StaticPlugin(base.Plugin):
     @property
     def link(self):
         """Return the link."""
-        return 'https://github.com/iksaif/defcon'
+        return 'https://github.com/criteo/defcon'
 
     def statuses(self):
         """Return the generated statuses."""
