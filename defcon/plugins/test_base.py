@@ -39,13 +39,13 @@ class StatusTests(test.TestCase):
 
     def test_basic(self):
         """Test that we can create statuses."""
-        s = base.Status('Test status', 5, 'http://github.com/iksaif/defcon',
+        s = base.Status('Test status', 5, 'http://github.com/criteo/defcon',
                         description='This is a test')
         expected = {
             'defcon': 5, 'title': 'Test status',
             'description': 'This is a test',
-            'link': 'http://github.com/iksaif/defcon',
-            'id': uuid.UUID('971adc54-d615-59b7-a797-2b8167153174'),
+            'link': 'http://github.com/criteo/defcon',
+            'id': uuid.UUID('235c445a-cd6f-5f46-91af-bada596275a6'),
             'time_start': None,
             'time_end': None,
         }

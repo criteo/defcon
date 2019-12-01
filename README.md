@@ -1,7 +1,7 @@
 # DefCon
 
-[![Build Status](https://travis-ci.org/iksaif/defcon.svg?branch=master)](https://travis-ci.org/iksaif/defcon)
-[![Coverage Status](https://coveralls.io/repos/github/iksaif/defcon/badge.svg)](https://coveralls.io/github/iksaif/defcon?branch=master)
+[![Build Status](https://travis-ci.org/criteo/defcon.svg?branch=master)](https://travis-ci.org/criteo/defcon)
+[![Coverage Status](https://coveralls.io/repos/github/criteo/defcon/badge.svg)](https://coveralls.io/github/iksaif/defcon?branch=master)
 [![PyPI version](https://badge.fury.io/py/defcon-monitoring.svg)](https://badge.fury.io/py/defcon-monitoring)
 
 UI and API to show an aggregate status of your services. The idea of defcon is that it gathers the status of various components of your infrastructure and exposes them to both humans and machines. Humans (:couple:) will go to the UI to see if something is known to be wrong, and machines (:computer:) will consume the API. This could be used to automatically pause Jenkins job or Chef runs when the production looks unstable.

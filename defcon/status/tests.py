@@ -118,7 +118,7 @@ DEFCON_COMPONENTS = {
     'production': {
         'name': 'Production',
         'description': 'All the production perimeter.',
-        'link': 'https://github.com/iksaif/defcon/wiki/production',
+        'link': 'https://github.com/criteo/defcon/wiki/production',
         'contact': 'escalation@iksaif.net',
         'plugins': [],
     },
