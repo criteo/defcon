@@ -1,16 +1,12 @@
 language: python
 
-dist: trusty
+dist: focal
 
 matrix:
   include:
-    - python: '3.4'
-      env: TOXENV=py34-coverage
-    - python: '3.5'
-      env: TOXENV=py35-coverage
-    - python: '3.6'
-      env: TOXENV=py36-coverage
-    - python: '3.6'
+    - python: '3.7'
+      env: TOKENV=py37-coverage
+    - python: '3.7'
       env: TOXENV=pylama
 
 install:
