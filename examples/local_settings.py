@@ -5,7 +5,7 @@ SECRET_KEY = 'cepowqjcenwqcnewqoinwqowq'
 DEBUG = True
 
 
-ALERTMANAGER_URL = 'http://demo.robustperception.io:9093/api/v1/'
+ALERTMANAGER_URL = 'http://demo.robustperception.io:9093/'
 
 PLUGINS_PRODUCTION = [
     # Some static statuses.
@@ -45,22 +45,22 @@ DEFCON_COMPONENTS = {
     'production': {
         'name': 'Production',
         'description': 'All the production perimeter.',
-        'link': 'https://github.com/iksaif/defcon/wiki/production',
-        'contact': 'escalation@iksaif.net',
+        'link': 'https://github.com/criteo/defcon/wiki/production',
+        'contact': 'escalation@criteo.net',
         'plugins': PLUGINS_PRODUCTION,
     },
     'observability': {
         'name': 'Observability',
         'description': '',
-        'link': 'https://github.com/iksaif/defcon/wiki/observability',
-        'contact': 'obs@iksaif.net',
+        'link': 'https://github.com/criteo/defcon/wiki/observability',
+        'contact': 'obs@criteo.net',
         'plugins': [],
     },
     'storage': {
         'name': 'Storage',
         'description': 'Storage Chef Perimeter',
-        'link': 'https://github.com/iksaif/defcon/wiki/storage',
-        'contact': 'storage@iksaif.net',
+        'link': 'https://github.com/criteo/defcon/wiki/storage',
+        'contact': 'storage@criteo.net',
         'plugins': [],
     },
 }
