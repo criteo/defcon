@@ -1,4 +1,4 @@
-django<=2.2
+django
 django-allauth
 django-annoying
 django-bootstrap-form
