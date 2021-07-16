@@ -9,6 +9,8 @@ from defcon.plugins import base
 
 
 DEFAULT_API = getattr(settings, 'ALERTMANAGER_API', None)
+DEFAULT_API_USERNAME = getattr(settings, 'ALERTMANAGER_API_USERNAME', None)
+DEFAULT_API_PASSWORD = getattr(settings, 'ALERTMANAGER_API_PASSWORD', None)
 
 
 class AlertmanagerPlugin(base.Plugin):
@@ -18,6 +20,8 @@ class AlertmanagerPlugin(base.Plugin):
     ```python
     {
       'api': 'http://alertmanager:9090/api/v2', // Url to root API.
+      'api_username': None,
+      'api_password': None,
       'receiver': 'default', // Get alerts rooted to this receiver.
       'labels': {}, // Get alerts matching these labels.
       'title_template': '{{ labels.alertname }}',
@@ -77,6 +81,8 @@ class AlertmanagerPlugin(base.Plugin):
 
         if config:
             self.api_url = config.get('api', DEFAULT_API) + '/api/v2/alerts/groups'
+            self.api_username = config.get('api_username', DEFAULT_API_USERNAME)
+            self.api_password = config.get('api_password', DEFAULT_API_PASSWORD)
             self.defcon = config['defcon']
 
     @property
@@ -106,7 +112,8 @@ class AlertmanagerPlugin(base.Plugin):
         if self._config is None:
             return ret
 
-        r = requests.get(self.api_url)
+        auth = (self.api_username, self.api_password)
+        r = requests.get(self.api_url, auth=auth)
         r.raise_for_status()
         dataFull = r.json()
         for data in dataFull:
