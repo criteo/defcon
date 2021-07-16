@@ -175,6 +175,8 @@ DEFCON_PLUGINS = [
 # JIRA_USERNAME = foo
 # JIRA_PASSWORD = password
 # ALERTMANAGER_API = 'http://alertmanager:9090/api/v1'
+# ALERTMANAGER_API_USERNAME = foo
+# ALERTMANAGER_API_PASSWORD = password
 
 # Enable only in local_settings and make sure this
 # is disabled when running migration related commands.
