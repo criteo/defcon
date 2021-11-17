@@ -172,9 +172,11 @@ DEFCON_PLUGINS = [
 
 # Defaults for plugins
 # JIRA_URL = 'https://jira/'
+# JIRA_PROXIES = {'http': 'http://proxy.com:1234', 'https': 'https://proxy.com:1234'}
 # JIRA_USERNAME = foo
 # JIRA_PASSWORD = password
 # ALERTMANAGER_API = 'http://alertmanager:9090/api/v1'
+# ALERTMANAGER_API_PROXIES = {'http': 'http://proxy.com:1234', 'https': 'https://proxy.com:1234'}
 # ALERTMANAGER_API_USERNAME = foo
 # ALERTMANAGER_API_PASSWORD = password
 
