@@ -10,6 +10,7 @@ from django.conf import settings
 
 
 DEFAULT_JIRA_URL = getattr(settings, 'JIRA_URL', None)
+DEFAULT_JIRA_PROXIES = getattr(settings, 'JIRA_PROXIES', None)
 DEFAULT_JIRA_USERNAME = getattr(settings, 'JIRA_USERNAME', None)
 DEFAULT_JIRA_PASSWORD = getattr(settings, 'JIRA_PASSWORD', None)
 
@@ -54,6 +55,7 @@ class JiraPlugin(base.Plugin):
 
         if config:
             self.url = config.get('url', DEFAULT_JIRA_URL)
+            self.proxies = config.get('proxies', DEFAULT_JIRA_PROXIES)
             self.username = config.get('username', DEFAULT_JIRA_USERNAME)
             self.password = config.get('password', DEFAULT_JIRA_PASSWORD)
             self.defcon = config['defcon']
@@ -87,7 +89,7 @@ class JiraPlugin(base.Plugin):
             return ret
 
         basic_auth = (self.username, self.password)
-        client = jira.JIRA(self.url, basic_auth=basic_auth, timeout=5)
+        client = jira.JIRA(self.url, basic_auth=basic_auth, timeout=5, proxies=self.proxies)
 
         issues = client.search_issues(self.jql, maxResults=self.max_results)
         for issue in issues:

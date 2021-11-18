@@ -9,6 +9,7 @@ from defcon.plugins import base
 
 
 DEFAULT_API = getattr(settings, 'ALERTMANAGER_API', None)
+DEFAULT_API_PROXIES = getattr(settings, 'ALERTMANAGER_API_PROXIES', None)
 DEFAULT_API_USERNAME = getattr(settings, 'ALERTMANAGER_API_USERNAME', None)
 DEFAULT_API_PASSWORD = getattr(settings, 'ALERTMANAGER_API_PASSWORD', None)
 
@@ -81,6 +82,7 @@ class AlertmanagerPlugin(base.Plugin):
 
         if config:
             self.api_url = config.get('api', DEFAULT_API) + '/api/v2/alerts/groups'
+            self.api_proxies = config.get('api_proxies', DEFAULT_API_PROXIES)
             self.api_username = config.get('api_username', DEFAULT_API_USERNAME)
             self.api_password = config.get('api_password', DEFAULT_API_PASSWORD)
             self.defcon = config['defcon']
@@ -113,7 +115,7 @@ class AlertmanagerPlugin(base.Plugin):
             return ret
 
         auth = (self.api_username, self.api_password)
-        r = requests.get(self.api_url, auth=auth)
+        r = requests.get(self.api_url, auth=auth, proxies=self.api_proxies)
         r.raise_for_status()
         dataFull = r.json()
         for data in dataFull:
