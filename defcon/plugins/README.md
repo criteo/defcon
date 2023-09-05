@@ -70,12 +70,11 @@ To be used to set defcon based on alerts.
 }
 ```
 
-# Endpoint
+## Endpoint
 
 Module: `defcon.plugins.endpoint.EndpointPlugin`
 
 To be used to set defcon based on Endpoint.
-
 
 ```python
 {
@@ -95,6 +94,6 @@ response of the API have to be like the simple defcon API:
 }
 ```
 
-## Write you own plugin.
+## Write you own plugin
 
 Take a look at [static.py](static.py), basically you need to implement the `statuses` method of a `Plugin` sub-class to make it return a list of status based on the settings you receive.

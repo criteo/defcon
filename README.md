@@ -56,7 +56,7 @@ See [defcon/plugins/README.md](defcon/plugins/README.md)
 
 ## Quickstart
 
-```
+```shell
 virtualenv venv -p python3
 source venv/bin/activate
 cp examples/local_settings.py defcon/
