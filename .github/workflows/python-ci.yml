@@ -17,6 +17,7 @@ jobs:
     env:
       TOKENV: py37-coverage
       TOXENV: pylama
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout code
