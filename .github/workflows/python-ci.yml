@@ -1,0 +1,39 @@
+name: Python CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: [3.7]
+
+    env:
+      TOKENV: py37-coverage
+      TOXENV: pylama
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install tox coveralls
+
+      - name: Run tests
+        run: tox
+
+      - name: Upload coverage report
+        if: success()
+        run: coveralls
