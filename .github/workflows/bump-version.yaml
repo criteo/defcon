@@ -27,12 +27,12 @@ jobs:
 
       - name: Push changes
         run: |
-          git push origin HEAD:refs/heads/bump-version
+          git push --set-upstream origin bump-version
 
       - name: Create Pull Request with Versioning Tag
         uses: peter-evans/create-pull-request@v3
         with:
-          title: "Bump version for release"
-          branch: "version-bump"
+          title: "[Deploy] Bump version for release"
+          branch: "bump-version"
           base: "master"
           labels: "versioning"
