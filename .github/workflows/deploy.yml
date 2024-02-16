@@ -16,14 +16,13 @@ jobs:
       - name: Install bumpversion
         run: pip install bumpversion
 
+      - name: Set git config
+        run: |
+          git config --local user.name "GitHub Action"
+          git config --local user.email "action@github.com"
+
       - name: Increment version
         run: bumpversion patch setup.py
-
-      - name: Commit version increment
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git commit -am "Bump version"
 
       - name: Push changes
         uses: ad-m/github-push-action@master
