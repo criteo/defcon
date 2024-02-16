@@ -22,14 +22,6 @@ jobs:
           git config --local user.name "GitHub Action"
           git config --local user.email "action@github.com"
 
-      - name: Increment version
-        run: bumpversion patch setup.py
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Push changes
         run: |
           git push origin HEAD:refs/heads/bump-version
