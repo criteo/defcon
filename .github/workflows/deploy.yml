@@ -7,6 +7,7 @@ on:
 
 jobs:
   bump_version:
+    if: ! contains(github.event.head_commit.message, 'Bump version')
     runs-on: ubuntu-latest
 
     steps:
@@ -27,10 +28,22 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.BYPASS_PULL_REQUEST_PRECONDITION_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push changes
+        run: |
+          git push origin HEAD:refs/heads/bump-version
+
+      - name: Create Pull Request with Versioning Tag
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: "Bump version for release"
+          branch: "version-bump"
+          base: "master"
+          labels: "versioning"
 
   deploy:
-    needs: bump_version
+    if: contains(github.event.head_commit.message, 'Bump version')
     runs-on: ubuntu-latest
 
     strategy:
