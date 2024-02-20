@@ -5,6 +5,7 @@ import uuid
 from django.utils import module_loading
 from django.utils import timezone
 from django.core.management import base
+from defcon.plugins import base as base_plugin
 
 from defcon.status import models
 
@@ -35,14 +36,30 @@ class Command(base.BaseCommand):
 
         expired_statuses = (existing_statuses - updated_statuses)
         if expired_statuses:
-            self.stdout.write(self.style.SUCCESS('Expiring %s' % expired_statuses))
-            models.Status.objects.filter(id__in=expired_statuses).update(time_end=now)
+            self.stdout.write(self.style.SUCCESS(
+                'Expiring %s' % expired_statuses))
+            models.Status.objects.filter(
+                id__in=expired_statuses).update(time_end=now)
+
+    def failure_status(plugin_obj: models.PluginInstance) -> base_plugin.Status:
+        plugin_name = plugin_obj.plugin.name
+        defcon = 3
+        title = f"Failed to run {plugin_name}"
+        id = uuid.uuid5(uuid.NAMESPACE_DNS, f"{title}-{str(timezone.now())}")
+
+        return base_plugin.Status(
+            title=title,
+            defcon=defcon,
+            link=None,
+            id=id
+        )
 
     def run_plugin(self, component_obj, plugin_obj):
         """Add a plugin."""
         self.stdout.write('Running %s %s:%s' % (
             plugin_obj.name, component_obj.name, plugin_obj.plugin.name))
-        plugin_class = module_loading.import_string(plugin_obj.plugin.py_module)
+        plugin_class = module_loading.import_string(
+            plugin_obj.plugin.py_module)
         plugin = plugin_class(plugin_obj.config)
 
         try:
@@ -56,7 +73,15 @@ class Command(base.BaseCommand):
             plugin_obj.failure += 1
             plugin_obj.failure_on = timezone.now()
             plugin_obj.save()
-            return set()
+
+            failure_status = self.failure_status()
+            failure_status_id = failure_status.id
+            self._save_status(
+                plugin_obj=plugin_obj,
+                status_id=failure_status_id,
+                status=failure_status
+            )
+            return set([failure_status_id])
 
         # Create an identifier unique to this plugin obj.
         statuses = [
