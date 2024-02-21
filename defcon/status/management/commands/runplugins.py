@@ -39,18 +39,7 @@ class Command(base.BaseCommand):
             self.stdout.write(self.style.SUCCESS(
                 'Expiring %s' % expired_statuses))
             models.Status.objects.filter(
-                id__in=expired_statuses).update(time_end=now)
-
-    def failure_status(error_message: str) -> base_plugin.Status:
-        defcon = 3
-        id = uuid.uuid5(uuid.NAMESPACE_DNS, f"{error_message}-{str(timezone.now())}")
-
-        return base_plugin.Status(
-            title=error_message,
-            defcon=defcon,
-            link=None,
-            id=id
-        )
+                id__in=expired_statuses).update(time_end=now)     
 
     def run_plugin(self, component_obj, plugin_obj):
         """Add a plugin."""
@@ -71,15 +60,20 @@ class Command(base.BaseCommand):
             plugin_obj.failure += 1
             plugin_obj.failure_on = timezone.now()
             plugin_obj.save()
-
-            failure_status = self.failure_status(msg)
-            failure_status_id = failure_status.id
+            
+            id = uuid.uuid5(uuid.NAMESPACE_DNS, f"{msg}-{str(timezone.now())}")
+            failing_status = base_plugin.Status(
+                title=msg,
+                defcon=3,
+                link=None,
+                id=id
+            )
             self._save_status(
                 plugin_obj=plugin_obj,
-                status_id=failure_status_id,
-                status=failure_status
+                status_id=id,
+                status=failing_status
             )
-            return set([failure_status_id])
+            return set([id])
 
         # Create an identifier unique to this plugin obj.
         statuses = [
