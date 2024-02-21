@@ -41,14 +41,12 @@ class Command(base.BaseCommand):
             models.Status.objects.filter(
                 id__in=expired_statuses).update(time_end=now)
 
-    def failure_status(plugin_obj: models.PluginInstance) -> base_plugin.Status:
-        plugin_name = plugin_obj.plugin.name
+    def failure_status(error_message: str) -> base_plugin.Status:
         defcon = 3
-        title = f"Failed to run {plugin_name}"
-        id = uuid.uuid5(uuid.NAMESPACE_DNS, f"{title}-{str(timezone.now())}")
+        id = uuid.uuid5(uuid.NAMESPACE_DNS, f"{error_message}-{str(timezone.now())}")
 
         return base_plugin.Status(
-            title=title,
+            title=error_message,
             defcon=defcon,
             link=None,
             id=id
@@ -74,7 +72,7 @@ class Command(base.BaseCommand):
             plugin_obj.failure_on = timezone.now()
             plugin_obj.save()
 
-            failure_status = self.failure_status()
+            failure_status = self.failure_status(msg)
             failure_status_id = failure_status.id
             self._save_status(
                 plugin_obj=plugin_obj,
