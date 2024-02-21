@@ -36,7 +36,7 @@ _TEST_REQUIRE = [l for l in _TESTS_REQUIREMENTS_TXT if "://" not in l]
 
 setup(
     name='defcon-monitoring',
-    version='0.3.7',
+    version='0.3.8',
     packages=find_packages(),
     include_package_data=True,
     license='GPLv3',
