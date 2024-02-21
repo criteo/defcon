@@ -15,7 +15,7 @@ from django import test
 from django.core import management
 from django.utils import timezone
 
-from defcon.plugins import base, static
+from defcon.plugins import base, static, failing
 from defcon.status import models
 from defcon.status import views
 
@@ -67,7 +67,7 @@ class FakePlugin(static.StaticPlugin):
         return 'Fake plugin'
 
 
-class FailingPlugin(static.StaticPlugin):
+class FailingPlugin(static.failing):
     @property
     def short_name(self):
         return 'FailingPlugin'
@@ -75,9 +75,6 @@ class FailingPlugin(static.StaticPlugin):
     @property
     def name(self):
         return 'FailingPlugin'
-
-    def statuses(self):
-        raise Exception("An error occurred")
 
 
 DEFCON_PLUGINS = [
