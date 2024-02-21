@@ -39,6 +39,16 @@ PLUGINS_PRODUCTION = [
             'defcon': 2,
         }
     },
+    # Test failing
+    {
+        'plugin': 'failing',
+        'name': 'failing test',
+        'config': {
+            'statuses': [
+                base.Status('Failing status')
+            ]
+        }
+    },
 ]
 
 DEFCON_COMPONENTS = {
@@ -68,4 +78,5 @@ DEFCON_COMPONENTS = {
 DEFCON_PLUGINS = [
     'defcon.plugins.static.StaticPlugin',
     'defcon.plugins.alertmanager.AlertmanagerPlugin',
+    'defcon.plugins.failing.FailingPlugin',
 ]

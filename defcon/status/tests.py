@@ -15,7 +15,7 @@ from django import test
 from django.core import management
 from django.utils import timezone
 
-from defcon.plugins import base, static
+from defcon.plugins import base, static, failing
 from defcon.status import models
 from defcon.status import views
 
@@ -67,7 +67,20 @@ class FakePlugin(static.StaticPlugin):
         return 'Fake plugin'
 
 
-DEFCON_PLUGINS = ['defcon.status.tests.FakePlugin']
+class FailingPlugin(failing.FailingPlugin):
+    @property
+    def short_name(self):
+        return 'FailingPlugin'
+
+    @property
+    def name(self):
+        return 'FailingPlugin'
+
+
+DEFCON_PLUGINS = [
+    'defcon.status.tests.FakePlugin',
+    'defcon.status.tests.FailingPlugin',
+]
 
 
 @test.utils.override_settings(DEFCON_PLUGINS=DEFCON_PLUGINS)
@@ -282,7 +295,8 @@ class TestRunPluginsCommand(test.TestCase):
 
         with self.components_with_plugin(status):
             management.call_command('runplugins', stdout=out)
-            self.assertIn("Running test Production:Fake plugin", out.getvalue())
+            self.assertIn("Running test Production:Fake plugin",
+                          out.getvalue())
             self.assertIn("Created Fake plugin:Test status", out.getvalue())
 
             status_model = models.Status.objects.all()[0]
@@ -304,8 +318,47 @@ class TestRunPluginsCommand(test.TestCase):
             status.description = 'status description'
 
             management.call_command('runplugins', stdout=out)
-            self.assertIn("Running test Production:Fake plugin", out.getvalue())
+            self.assertIn("Running test Production:Fake plugin",
+                          out.getvalue())
             self.assertIn("Updated Fake plugin:Test status", out.getvalue())
 
             status_model = models.Status.objects.all()[0]
             self.assertEqual(status_model.description, status['description'])
+
+    @contextlib.contextmanager
+    def components_with_failing_plugin(self):
+        components = copy.deepcopy(DEFCON_COMPONENTS)
+        plugin = {
+            'plugin': 'FailingPlugin',
+            'name': 'Failure',
+            'description': 'test failing plugin instance'
+        }
+        components['production']['plugins'].append(plugin)
+
+        out = StringIO()
+        self.addCleanup(out.close)
+        with self.settings(DEFCON_COMPONENTS=components):
+            management.call_command('loadcomponents', stdout=out)
+            yield components
+
+    def test_run_failing_plugin(self):
+        out = StringIO()
+        self.addCleanup(out.close)
+        status = base.Status(
+            title='Failed to run FailingPlugin',
+            defcon=3,
+            link=None
+        )
+
+        with self.components_with_failing_plugin(status):
+            management.call_command('runplugins', stdout=out)
+            self.assertIn("Running test Production:FailingPlugin",
+                          out.getvalue())
+            self.assertIn("Created FailingPlugin:Failure status",
+                          out.getvalue())
+
+            status_model = models.Status.objects.all()[0]
+
+            self.assertEqual(status_model.title, status['title'])
+            self.assertEqual(status_model.link, status['link'])
+            self.assertEqual(status_model.defcon, status['defcon'])
