@@ -48,4 +48,4 @@ class FailingPlugin(base.Plugin):
 
     def statuses(self):
         """Return the generated statuses."""
-        raise Exception
+        raise Exception("Failed to generate statuses")
