@@ -12,8 +12,17 @@ class Status(dict):
 
     NAMESPACE = uuid.UUID('{656cf8aa-25bd-11e7-a9eb-68f7288416b6}')
 
-    def __init__(self, title, defcon=3, link="", id=None, description=None,
-                 time_start=None, time_end=None, override=None):
+    def __init__(
+        self, 
+        title, 
+        defcon=3, 
+        link="#", 
+        id=None, 
+        description=None,
+        time_start=None, 
+        time_end=None, 
+        override=None
+    ):
         """Initialize a status."""
         s = self
 

@@ -65,7 +65,6 @@ class Command(base.BaseCommand):
             failing_status = base_plugin.Status(
                 title=msg,
                 defcon=3,
-                link=None,
                 id=id
             )
             self._save_status(
